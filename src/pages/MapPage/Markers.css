@@ -1,0 +1,74 @@
+.popup-tittle {
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.popup-adress {
+    font-size: 0.9rem;
+    font-weight: 500;   
+    margin: 0.4rem 0;
+    text-align: center;
+}
+.popup-worktime {
+
+    padding: 2px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center !important;
+    margin: 0.7rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-worktime > svg {
+    position: relative;
+    margin: 0 5px;
+}
+
+.popup-connector-type {
+
+}
+
+.popup-icon {
+    position: relative;
+}
+
+.popup-connectors {
+    display: flex;
+    justify-content: center;
+}
+
+.popup-connector {
+    display: grid;
+    justify-content: space-between;
+}
+.popup-connector-type {
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.popup-connector-power {
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.popup-connector-status {
+    text-align: center;
+    align-items: center;
+    margin: auto;
+    padding: 3px;
+    border-radius: 50%;
+    height: 44px;
+    width: 44px
+    /* display: flex; */
+}
+
+.popup-connector-status-status {
+    font-size: 32px;
+    float: center;
+    font-weight: 600;
+}

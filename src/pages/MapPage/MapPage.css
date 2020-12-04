@@ -1,0 +1,25 @@
+.map-window {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 6fr;
+    overflow: hidden;
+    padding: 120px 10px 10px 10px;
+    background-color: #d6d6d6;
+}
+.map-body {
+    -webkit-box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.74);
+    -moz-box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.74);
+    box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.74);
+    height: 87vh;
+    width: 100%;
+
+}
+
+.leaflet-container {
+    height: 100%;
+    width: 100% ;
+}
+
+.easy-button-button {
+    padding: 2.6px;
+}

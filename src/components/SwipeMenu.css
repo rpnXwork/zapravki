@@ -1,0 +1,135 @@
+@keyframes fadeInRight {
+    0% {
+    transform: translateX(300px);
+    }
+    100% {
+    transform: translateX(0);
+    }
+}
+@keyframes fadeOutRight {
+    0% {
+    transform: translateX(0);
+    }
+    100% {
+    transform: translateX(300px);
+    }
+}
+
+.cover {
+  visibility: hidden;
+  position: fixed;
+  opacity: 0;
+  transition: 1s;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: #02020263;
+}
+
+.menu-boxrr {
+  position: relative;
+  z-index: 2;
+}
+
+.hamburger-menu {
+    z-index: 1;
+}
+#menu-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    visibility: hidden;
+  }
+  
+  #menu-toggle:checked ~ .menu-btn > span {
+    transform: rotate(45deg);
+    background-color: black;
+  }
+  #menu-toggle:checked ~ .menu-btn > span::before {
+    top: 0;
+    background-color: black;
+    transform: rotate(0);
+  }
+  #menu-toggle:checked ~ .menu-btn > span::after {
+    top: 0;
+    background-color: black;
+    transform: rotate(90deg);
+  }
+  #menu-toggle:checked ~ .menu-box {
+    visibility: visible;
+    right: 0;
+  }
+  #menu-toggle:checked ~ .cover {
+    visibility: visible;
+    opacity: 1;
+    right: 0;
+    transition: 1.2s;
+  }
+  
+  .menu-btn {
+    display: flex;
+    z-index: 10;
+    position: relative;
+    align-items: center;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+  }
+  
+  .menu-btn > span,
+  .menu-btn > span::before,
+  .menu-btn > span::after {
+    display: block;
+    position: absolute;
+  
+    width: 26px;
+    height: 2px;
+  
+    background-color: #ffffff;
+  
+    transition-duration: .25s;
+  }
+  .menu-btn > span::before {
+    content: '';
+    top: -8px;
+  }
+  .menu-btn > span::after {
+    content: '';
+    top: 8px;
+  }
+  
+  .menu-box {
+    z-index: 5;
+    display: block;
+    position: fixed;
+    visibility: hidden;
+    top: 0;
+    right: -100%;
+    width: 300px;
+    height: 100%;
+    margin: 0;
+    padding: 80px 0;
+    list-style: none;
+    background-color: #f7f7f7;
+    box-shadow: 1px 0px 6px rgba(0, 0, 0, .2);
+  
+    transition-duration: .4s;
+  }
+  
+  .h-menu-item {
+    display: block;
+    padding: 12px 24px;
+    text-align: left;
+    color: rgb(0, 0, 0);
+  
+    font-size: 20px;
+    font-weight: 500;
+  
+    text-decoration: none;
+  
+    transition-duration: .25s;
+  }
+  .h-menu-item:hover {
+    background-color: #CFD8DC;
+  }
