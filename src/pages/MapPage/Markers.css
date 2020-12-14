@@ -72,3 +72,29 @@
     float: center;
     font-weight: 600;
 }
+
+.popup-btn {
+    cursor: pointer;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 10px 30px;
+    display: inline-block;
+    color: #FFF;
+    position: relative;
+    display: inline-block;
+    line-height: 1;
+    -webkit-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+    vertical-align: middle;
+    text-align: center;
+    transition: all .4s ease;
+    text-transform: uppercase;
+    background-color: #41A350;
+    border-style: none;
+    border-radius: 0;
+}
+.leaflet-popup-content-wrapper {
+    text-align: center;
+}

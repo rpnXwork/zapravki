@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect, useContext}  from 'react';
 import { Marker, Popup } from "react-leaflet";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock  } from '@fortawesome/free-solid-svg-icons'
@@ -69,16 +69,32 @@ import {
     ReservedReserved,
     } from './icons/Icon'
 
+import { Link } from 'react-router-dom';
+import {AuthContext} from '../../context/AuthContext'
 
 
 const  Popups = ({props}) => {
-
+    const {isAuthenticated, token} = useContext(AuthContext)
 
     const [state, setState] = useState(props)
+    const [work, setWork] = useState(false)
 
         useEffect(() => {
             setState(props)
         }, [props])
+
+        useEffect(() => {
+            if (state.connectors.length > 1 ){
+                if (state.connectors[0].status ==='work' || state.connectors[1].status ==='work' ){
+                setWork(true)
+                }
+            }
+            if (state.connectors[0].status ==='work'){
+                setWork(true)
+                }
+            // setWork(false)
+            
+        }, [state])
 
     return (
         <>
@@ -90,11 +106,11 @@ const  Popups = ({props}) => {
                     {state.connectors.map((key, i) => {
 
                         if (key.status === "work") {
-                           return (
+                            return (  
                             <div className='popup-connector' key={i} style={{padding: '10px'}}>
                                     <div className='popup-connector-type'>{key.type}</div>
                                     <div className='popup-connector-power'>{key.power}</div>
-                                    <div className='popup-connector-status' style={{border:'8px solid green'}}>
+                                    <div className='popup-connector-status' style={{border:'8px solid #41a350'}}>
                                         <div className='popup-connector-status-status'>
                                             {i + 1}
                                         </div>
@@ -107,7 +123,7 @@ const  Popups = ({props}) => {
                                 <div className='popup-connector' key={i} style={{padding: '10px'}}>
                                         <div className='popup-connector-type'>{key.type}</div>
                                         <div className='popup-connector-power'>{key.power}</div>
-                                        <div className='popup-connector-status' style={{border:'8px solid gray'}}>
+                                        <div className='popup-connector-status' style={{border:'8px solid #A3A6AB'}}>
                                             <div className='popup-connector-status-status'>
                                                 {i + 1}
                                             </div>
@@ -120,7 +136,7 @@ const  Popups = ({props}) => {
                                 <div className='popup-connector' key={i} style={{padding: '10px'}}>
                                         <div className='popup-connector-type'>{key.type}</div>
                                         <div className='popup-connector-power'>{key.power}</div>
-                                        <div className='popup-connector-status' style={{border:'8px solid black'}}>
+                                        <div className='popup-connector-status' style={{border:'8px solid #404040'}}>
                                             <div className='popup-connector-status-status'>
                                                 {i + 1}
                                             </div>
@@ -133,7 +149,7 @@ const  Popups = ({props}) => {
                                 <div className='popup-connector' key={i} style={{padding: '10px'}}>
                                         <div className='popup-connector-type'>{key.type}</div>
                                         <div className='popup-connector-power'>{key.power}</div>
-                                        <div className='popup-connector-status' style={{border:'8px solid blue'}}>
+                                        <div className='popup-connector-status' style={{border:'8px solid #00B0E6'}}>
                                             <div className='popup-connector-status-status'>
                                                 {i + 1}
                                             </div>
@@ -146,7 +162,7 @@ const  Popups = ({props}) => {
                                 <div className='popup-connector' key={i} style={{padding: '10px'}}>
                                         <div className='popup-connector-type'>{key.type}</div>
                                         <div className='popup-connector-power'>{key.power}</div>
-                                        <div className='popup-connector-status' style={{border:'8px solid orange'}}>
+                                        <div className='popup-connector-status' style={{border:'8px solid #E5BB12'}}>
                                             <div className='popup-connector-status-status'>
                                                 {i + 1}
                                             </div>
@@ -159,7 +175,7 @@ const  Popups = ({props}) => {
                                 <div className='popup-connector' key={i} style={{padding: '10px'}}>
                                         <div className='popup-connector-type'>{key.type}</div>
                                         <div className='popup-connector-power'>{key.power}</div>
-                                        <div className='popup-connector-status' style={{border:'8px solid purple'}}>
+                                        <div className='popup-connector-status' style={{border:'8px solid #C416FF'}}>
                                             <div className='popup-connector-status-status'>
                                                 {i + 1}
                                             </div>
@@ -172,7 +188,7 @@ const  Popups = ({props}) => {
                                 <div className='popup-connector' key={i} style={{padding: '10px'}}>
                                     <div className='popup-connector-type'>{key.type}</div>
                                     <div className='popup-connector-power'>{key.power}</div>
-                                    <div className='popup-connector-status' style={{border:'8px solid red'}}>
+                                    <div className='popup-connector-status' style={{border:'8px solid #FF3549'}}>
                                         <div className='popup-connector-status-status'>
                                             {i + 1}
                                         </div>
@@ -183,8 +199,12 @@ const  Popups = ({props}) => {
                         
                     })}
                 </div>
-            </Popup> 
-            
+                
+                {isAuthenticated && work?
+                <Link to={`map/station${state.id}`}> <button className='popup-btn'>Зарядиться</button></Link>:
+                 isAuthenticated && !work?<div>Нет доступных станций</div>:
+                <Link to='/login'> <button className='popup-btn'>Войти</button></Link>}
+            </Popup>   
         </>
     )
     
@@ -193,11 +213,14 @@ const  Popups = ({props}) => {
 const Markers = ({props}) => {
 
 
+
+
     const [state, setState] = useState(props)
 
         useEffect(() => {
             setState(props)
         }, [props])
+
 
 const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
 
@@ -337,7 +360,7 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
                     <Popups props = {props}/>                  
             </Marker>
         )}
-    if (state.connectors[0].status === 'build' && state.connectors[1].status === 'reserverd'){
+    if (state.connectors[0].status === 'build' && state.connectors[1].status === 'reserved'){
         return(
                 <Marker position={geo} icon = {BuildReserved}>
                     <Popups props = {props}/>                  
@@ -369,7 +392,7 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
         )}
 
 
-    if (state.connectors[0].status === 'busy' && state.connectors[1].status === 'buid'){
+    if (state.connectors[0].status === 'busy' && state.connectors[1].status === 'build'){
         return(
                 <Marker position={geo} icon = {BusyBuild}>
                  <Popups props = {props}/>                  
@@ -486,7 +509,7 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
                     <Popups props = {props}/>                  
             </Marker>
         )}
-    if (state.connectors[0].status === 'connected' && state.connectors[1].status === 'reserverd'){
+    if (state.connectors[0].status === 'connected' && state.connectors[1].status === 'reserved'){
         return(
                 <Marker position={geo} icon = {ConnectedReserved}>
                     <Popups props = {props}/>                  
@@ -530,7 +553,7 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
                     <Popups props = {props}/>                  
             </Marker>
         )}
-    if (state.connectors[0].status === 'reserved' && state.connectors[1].status === 'reserverd'){
+    if (state.connectors[0].status === 'reserved' && state.connectors[1].status === 'reserved'){
         return(
                 <Marker position={geo} icon = {ReservedReserved}>
                     <Popups props = {props}/>                  
@@ -574,7 +597,7 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
                     <Popups props = {props}/>                  
             </Marker>
         )}
-    if (state.connectors[0].status === 'alert' && state.connectors[1].status === 'reserverd'){
+    if (state.connectors[0].status === 'alert' && state.connectors[1].status === 'reserved'){
         return(
                 <Marker position={geo} icon = {AlertReserved}>
                     <Popups props = {props}/>                  
