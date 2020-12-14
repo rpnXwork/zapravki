@@ -3,44 +3,80 @@ import {useState, useCallback, useEffect} from 'react'
 const storageName = 'userData'
 
 export const useAuth = () => {
+  const [id, setId] = useState(null)
   const [token, setToken] = useState(null)
+  const [emailConfirmed, setEmailConfirmed] = useState(null)
+  const [phoneNumber, setPhoneNumber] = useState(null)
+  const [email, setEmail] = useState(null)
+  const [firstName, setFirstName] = useState(null)
+  const [lastName, setLastName] = useState(null)
+  const [gender, setGender] = useState(null)
+  const [birthdate, setBirthdate] = useState(null)
   const [ready, setReady] = useState(false)
-  const [userId, setUserId] = useState(null)
-  const [nickname, setNickname] = useState(null)
-  const [role, setRole] = useState(null)
 
 
-  const login = useCallback((jwtToken, id, nickname, role) => {
-    setToken(jwtToken)
-    setUserId(id)
-    setNickname(nickname)
-    setRole(role)
+  const login = useCallback((data) => {
+    setId(data.id)
+    setPhoneNumber(data.phoneNumber)
+    setEmail(data.email)
+    setFirstName(data.firstName)
+    setLastName(data.lastName)
+    setGender(data.gender)
+    setBirthdate(data.birthdate)
+    setToken(data.token)
+    setEmailConfirmed(data.emailConfirmed)
+
+    console.log("SUCK!")
     
     localStorage.setItem(storageName, JSON.stringify({
-      userId: id,
-      token: jwtToken, 
-      nickname: nickname,
-      role: role
+      phoneNumber: data.phoneNumber,
+      email: data.email, 
+      firstName: data.firstName,
+      lastName: data.lastName,
+      gender: data.gender,
+      birthdate: data.birthdate,
+      id: data.id,
+      token: data.token,
+      emailConfirmed: data.emailConfirmed
     }))
   }, [])
 
 
   const logout = useCallback(() => {
+    setPhoneNumber(null)
+    setEmail(null)
+    setFirstName(null)
+    setLastName(null)
+    setGender(null)
+    setBirthdate(null)
     setToken(null)
-    setUserId(null)
-    setNickname(null)
-    setRole(null)
+    setEmailConfirmed(null)
+    setId(null)
+    
     localStorage.removeItem(storageName)
   }, [])
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem(storageName))
     if (data && data.token) {
-      login(data.token, data.userId, data.nickname, data.role)
+      login(data)
     }
     setReady(true)
   }, [login])
 
 
-  return { login, logout, token, userId, ready, nickname, role }
+  return {
+    id,
+    token,
+    emailConfirmed,
+    phoneNumber,
+    email,
+    firstName,
+    lastName,
+    gender,
+    birthdate,
+    login,
+    logout,
+    ready
+  }
 }

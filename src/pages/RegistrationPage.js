@@ -1,32 +1,51 @@
-import React, {useState, useEffect} from 'react';
-import {NavLink} from 'react-router-dom'
-import {useMessage} from '../hooks/message.hook'
-import {useHttp} from '../hooks/http.hook'
-import jwt from 'jsonwebtoken'
+import React, {useState, useEffect, Children} from 'react';
+import {NavLink, useLocation ,useParams } from 'react-router-dom';
+import {useMessage} from '../hooks/message.hook';
+import {useHttp} from '../hooks/http.hook';
+import jwt from 'jsonwebtoken';
 import { Timer } from '../components/Timer';
 import { Loaderr } from '../components/Loaderr';
 import {API, PORT} from '../api'
-import DatePicker from "react-datepicker";
+import PhoneInput from 'react-phone-input-2'
+import './style/React-telinput.css'
 import './style/RegistrationPage.css'
-import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from 'react-date-picker';
 
-    
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye  } from '@fortawesome/free-solid-svg-icons'
+import { faEyeSlash  } from '@fortawesome/free-solid-svg-icons'
+
+import ReactCodeInput from 'react-verification-code-input';
+
+
 
 
 export const RegistrationPage = () => {
+
     const message = useMessage()
     const [mes, setMes] = useState(null)
     const {loading, request, error, clearError} = useHttp()
     const [status, setStatus] = useState(false)
-
+    const [passwordShow, setPasswordShow] = useState(false)
+    const [date, setDate] = useState(new Date(2000, 0, 1))
+    const [confirmation, setConfirmation] = useState(null)
+    const [confirmstatus, setConfirmstatus] = useState(false)
+    const [gender, setGender] = useState('Мужской')
+    
     const [form, setForm] = useState({
-        email: "", password: "", name: "", surname: "", phone: "+" + 375, date: new Date(2000, 0, 1, 0, 0 ,0, 0)
+        phoneNumber: null,
+        email: "", 
+        password: "",
+        firstName: "",
+        lastName: "", 
+        gender: "male",
+        birthdate: new Date(2000, 0, 1)
       })
     const [rpas, setRpas] = useState({
         repeatPassword: ""
     })
 
-    let jtoken = jwt.sign(form, 'secret', {algorithm: 'HS512'})
+    let jtoken = jwt.sign(form, 'chargepoint', {algorithm: 'HS512'})
     let finaltoken = {token: jtoken}
 
       useEffect(() => {
@@ -36,8 +55,16 @@ export const RegistrationPage = () => {
         clearError()
       }, [error, mes, message, clearError])
 
-      
-    
+      useEffect(() => {
+          if (gender === 'Мужской'){
+            setForm({...form, gender: 'male' })
+          } 
+          if (gender === 'Жеснский') {
+            setForm({...form, gender: 'female' })
+          }
+         
+      }, [form, gender])
+
       useEffect(() => {
         window.M.updateTextFields()
       }, [])
@@ -59,7 +86,7 @@ export const RegistrationPage = () => {
     //     return passw.test(password)
     // }
     
-    const check = (email, password, repeatPassword, phone, name, surname) => {
+    const check = (email, password, repeatPassword, phoneNumber, firstName, lastName) => {
     if (!email){
         setMes("Введите Email")
         return false
@@ -88,23 +115,23 @@ export const RegistrationPage = () => {
         setMes("Повторный пароль не совпадаетс пародем")
         return false
     }
-    if (!phone){
+    if (!phoneNumber){
         setMes("Введите телефон")
         return false
     }
-    if (phone.length !== 13){
-        setMes("Введите телефон в формате +375ХХХХХХХХ")
+    if (phoneNumber.length < 12){
+        setMes("Введенный телефон не коректен")
         return false
     }
-    if (!name){
+    if (!firstName){
         setMes("Введите Имя")
         return false
     }
-    if (name.length <= 3){
+    if (firstName.length <= 3){
         setMes("Имя должно быть не меньше 3 Букв")
         return false
     }
-    if (!surname){
+    if (!lastName){
         setMes("Введите фамилию")
         return false
     }
@@ -114,12 +141,15 @@ export const RegistrationPage = () => {
 
     const reset = (event) => {
         event.preventDefault()
+        setPasswordShow(false)
         setForm({
+            phoneNumber: "",
             email: "",
             password: "", 
-            name: "",
-            surname: "",
-            phone: "",
+            firstName: "",
+            lastName: "",
+            gender: "",
+            birthdate: ""
           })
     }
 
@@ -128,9 +158,9 @@ export const RegistrationPage = () => {
             form.email,
             form.password,
             rpas.repeatPassword,
-            form.nickname,
-            form.name,
-            form.surname
+            form.phoneNumber,
+            form.firstName,
+            form.lastName
             )){
                 try {
                     const data = await request(`${API}${PORT}/register`, 'POST', finaltoken)
@@ -138,17 +168,95 @@ export const RegistrationPage = () => {
                         setMes(data.message)
                 } catch (e) {
                     setStatus(true)
+                    // setMes(e)
                 }
           }
+    }
+
+    const formatDate = (data) => {
+        setDate(data)
+        let arr = String(data).split(" ")
+        let year = arr[3]
+        let day = arr[2]
+
+        const mton = (m) => {
+
+            if (m === "Jan") {
+                return('01')
+
+            } else if (m === "Feb") {
+                return('02')
+            }
+            else if (m === "Mar") {
+                return('03')
+            }
+            else if (m === "Apr") {
+                return('04')
+            }
+            else if (m === "May") {
+                return('05')
+            }
+            else if (m === "Jun") {
+                return('06')
+            }
+            else if (m === "Jul") {
+                return('07')
+            }
+            else if (m === "Aug") {
+                return('08')
+            }
+            else if (m === "Sep") {
+                return('09')
+            }
+            else if (m === "Oct") {
+                return('10')
+            }
+            else if (m === "Nov") {
+                return('11')
+            }
+
+            else if (m === "Feb") {
+                return('11')
+            }
+
+            else if (m === "Dec") {
+                return('12')
+            }
+
+        }
+
+        let month = mton(arr[1])
+        
+        let findatate = `${year}-${month}-${day}` 
+        console.log(findatate)
+
+        setForm({...form,  "birthdate": findatate  })
+    }
+
+    const confirm = async () => {
+        try {
+        const data = await request(`${API}${PORT}/activate`, 'POST', {"code": confirmation})
+            setMes(data.message)
+            setConfirmstatus(true)
+        } catch (e) {
+            setConfirmstatus(false)
+        }
     }
 
     if (status){
         return(
             <div className="afterregblock">
-                <Loaderr/>
-                <div>Проверьте почту!</div>
-                <div>На главную через <Timer  timeout={5000} adress={'/'} /> секунд..</div>
-                <NavLink to='/'>Главная</NavLink>
+                <div className="afterregblock-tittle">Введите код из смс</div>
+                <div><ReactCodeInput
+                fields={4}
+                type={'number'}
+                onChange={(num)=>{setConfirmation(num)}}
+                onComplete={confirm}
+                /></div>
+                {confirmstatus?
+                <div className="afterregblock-text"> Ваш Телефон подтвержден, вы будете перенаправлены на станицу логиначерез <Timer  timeout={10000} adress={'/login'} /> секунд..</div>:
+                <div></div>}
+                <NavLink className="afterregblock-text" to='/'>Главная</NavLink>
                 
             </div>
         )
@@ -179,9 +287,12 @@ export const RegistrationPage = () => {
                                 <span className="focus-input"></span>
                             </div>
                             <div className="wrap-input" data-validate="Password is required">
+                                <button className='showpassword-btn' onClick={()=>setPasswordShow(!passwordShow)}>
+                                    <FontAwesomeIcon icon={passwordShow?faEye:faEyeSlash} size="lg"/>
+                                </button>
                                 <input
                                     className="input-area"
-                                    type="password"
+                                    type={passwordShow?"text":"password"}
                                     name="password"
                                     placeholder="Пароль"
                                     value={form.password}
@@ -190,33 +301,45 @@ export const RegistrationPage = () => {
                                 />
                                 <span className="focus-input"></span>
                             </div>
-                            <div className="wrap-input" data-validate="Nickname is required">
+                            <div className="wrap-input" data-validate="name is required">
                                 <input
                                     className="input-area"
                                     type="text"
-                                    name="name"
+                                    name="firstName"
                                     placeholder="Введите Имя"
-                                    value={form.name}
+                                    value={form.firstName}
                                     onChange={changeHandler}
                                     required
                                 />
                                 <span className="focus-input"></span>
+                            </div>
+                            <div className="wrap-input wrap-data-input" data-validate="name is required">
+                                <div className='wrap-data-input-text'>Ваш пол</div>
+                                <select
+                                    className="gender-input-area"
+                                    name="gender"
+                                    placeholder="Введите ваш Пол"
+                                    value={gender}
+                                    onChange={(e)=>{setGender(e.target.value)}}
+                                    required
+                                >
+                                    <option>Мужской</option>
+                                    <option>Жеснский</option>
+                                </select>
                             </div>
                         </div>
 
                         <div className='column'>
-                            <div className="wrap-input" data-validate="Email is required">
-                                <input
-                                    className="input-area"
-                                    type="text"
-                                    name="phone"
-                                    placeholder="Телефон"
-                                    value={form.phone}
-                                    onChange={changeHandler}
-                                    required
+                                <PhoneInput
+                                    containerClass="wrap-input"
+                                    inputClass="input-area"
+                                    onlyCountries={['by','ru','ua']}
+                                    country={'by'}
+                                    value={form.phoneNumber}
+                                    onChange={phoneNumber => setForm({...form,  "phoneNumber": phoneNumber })}
                                 />
                                 <span className="focus-input"></span>
-                            </div>
+                                
                             <div className="wrap-input" data-validate="Password is required">
                                 <input
                                     className="input-area"
@@ -233,18 +356,23 @@ export const RegistrationPage = () => {
                                 <input
                                     className="input-area"
                                     type="text"
-                                    name="surname"
+                                    name="lastName"
                                     placeholder="Фамилия"
-                                    value={form.surname}
+                                    value={form.lastName}
                                     onChange={changeHandler}
                                     required
                                 />
                                 <span className="focus-input"></span>
                             </div>
-                            <div className="wrap-input" data-validate="Email is required">
-                            <DatePicker selected={form.date} onChange={ (data) => setForm({...form,  "date": data })} name="date" />
+                            <div className="wrap-input wrap-data-input" data-validate="Email is required">
+                            <div className='wrap-data-input-text'>Дата рождения</div>
+                            <DatePicker 
+                                format={'dd-M-y'} 
+                                value={date} 
+                                onChange={(data) =>formatDate(data)} 
+                                name="birthdate"
+                                locale={'by-BY'}/>
 
-                                <span className="focus-input"></span>
                             </div>
                             
                         </div>

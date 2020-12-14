@@ -1,21 +1,16 @@
+import React, {useEffect, useState, useContext}  from 'react';
 import './style/MainPage.css'
 import Carousel from '../components/Carousel'
 import video from './style/video/video.mp4'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBusinessTime  } from '@fortawesome/free-solid-svg-icons'
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
-import { faHome  } from '@fortawesome/free-solid-svg-icons'
-import { faMale  } from '@fortawesome/free-solid-svg-icons'
-import { faCogs } from '@fortawesome/free-solid-svg-icons'
-import { faRocket  } from '@fortawesome/free-solid-svg-icons'
-import { faPlug } from '@fortawesome/free-solid-svg-icons'
-import { faCopyright  } from '@fortawesome/free-solid-svg-icons'
-import { faMobileAlt  } from '@fortawesome/free-solid-svg-icons'
-import { faMapMarkerAlt  } from '@fortawesome/free-solid-svg-icons'
+import { faBusinessTime, faShoppingCart, faHome, faMale, faCogs, faRocket, faPlug, faCopyright, faMobileAlt, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
 import { NavLink } from 'react-router-dom'
 
-
 function MainPage() {
+
+    useEffect(() => {
+        localStorage.removeItem("mappage")
+    }, [])
 
     return (
         <>  
@@ -57,8 +52,6 @@ function MainPage() {
                             </div>
                     </div>
                 </div>
-
-                
 
 {/* conviguration block */}
                 <div className='configuration-container'>
@@ -103,8 +96,6 @@ function MainPage() {
                         </div>
                     </div>
                 </div>
-
-
 
 {/* model block */}
 
@@ -154,13 +145,11 @@ function MainPage() {
                                 <div className='mt-text'>
                                 Модельний ряд зарядних станцій для електромобилів CNIITY Chargers представлений власними розробками, які підійдуть для різного використання станцій - комерційного та домашнього, і можливі з індивідуальною комплектацією:
                                 </div>
-                                <button className='mt-button'><FontAwesomeIcon icon={faShoppingCart}/>В МАГАЗИН</button>
+                                <button className='mt-button'><FontAwesomeIcon icon={faShoppingCart}/> В МАГАЗИН</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
 
 {/* Приемущества  */}
 
