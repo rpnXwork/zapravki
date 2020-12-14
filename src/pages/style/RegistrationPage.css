@@ -3,14 +3,23 @@
   }
 
 .afterregblock {
-    position: absolute;
-    left: 0;
-    right: 0;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 80%;
+    height: 80vh
+}
+
+.afterregblock-tittle {
+
+    margin: 25px;
+    font-size: 20px;
+}
+
+.afterregblock-text {
+    margin: 20px;
+    font-size: 16px;
 }
 
 .button-reset {
@@ -29,4 +38,96 @@
 .buttonimage:active {
     background-color: #fff;
 }
+
+.wrap-input {
+    position: relative;
+}
+
+.showpassword-btn {
+    cursor: pointer;
+    top: 32px;
+    position: absolute;
+    right: 48px;
+    border: none;
+    background-color: unset;
+    border-radius: 50%;
+}
+
+.showpassword-btn:hover {
+    background-color: rgb(0, 0, 0);
+    color: #fff;
+}
+
+
+.wrap-data-input {
+    border: 2px solid black;
+    display: flex;
+    align-items: center;
+    width: 320px;
+    margin: 10px;
+    padding: 10px;
+    justify-content: space-between;
+}
+
+.wrap-data-input-text {
+    color: rgb(133, 133, 133);
+    font-size: 16px;
+
+}
+
+select {
+    text-align: center;
+    text-align-last: center;
+    /* webkit*/
+  }
+
+option {
+    text-align: center;
+    /* reset to left*/
+  }
+
+.gender-input-area {
+    height: 40px;
+    width: 200px;
+    border: none;
+    cursor: pointer;
+}
+
+/* .react-date-picker  {
+    border: 2px solid black;
+} */
+
+.react-date-picker__inputGroup {
+    right: 64px;
+    position: absolute;
+}
+
+.react-date-picker__button {
+    padding: revert!important;
+
+}
+
+.react-date-picker__clear-button {
+    right: 0;
+
+    position: absolute;
+}
+
+.react-date-picker__calendar-button {
+    position: absolute;
+    right: 27px;
+}
+.react-date-picker__wrapper {
+    border: none!important;
+    align-items: center;
+}
   
+.react-date-picker__wrapper {
+    background-color: rgba(255, 255, 255, 0.856)!important;
+    margin: 10px!important;
+    /* height: 45px!important; */
+    padding: 10px!important;
+    font-size: 16px!important;
+    width: 140px!important;
+    border: none;
+}

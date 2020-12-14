@@ -518,6 +518,9 @@ button:focus {
     color: #41A350;
     transition: .8s;
 }
+.mapinfo-box a {
+    color: #41A350;
+}
 
 .mapinfo-box:hover {
     color: #525252;

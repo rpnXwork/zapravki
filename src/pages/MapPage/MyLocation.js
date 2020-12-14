@@ -6,7 +6,7 @@ import o from './M.png'
 import 'leaflet-easybutton'
 import 'leaflet-easybutton/src/easy-button.css'
 
-const Test = () => {
+const MyLocation = () => {
 
     const map = useMap()
 
@@ -38,4 +38,4 @@ const Test = () => {
 }
 
 
-export default Test
+export default MyLocation

@@ -31,7 +31,7 @@ const MapOptions = ({updateData}) => {
 
     useEffect(()=>{
         updateData(options)
-    },[options])
+    },[options, updateData])
 
     return (
         <div className='map-options-blocks'>
@@ -54,8 +54,8 @@ const MapOptions = ({updateData}) => {
                         Статус
                     </div>
                     <div className='mo-block-body'>
-                        <div className='mo-block-body-text'><span><input checked={options.statusfree} name="statusfree" onChange={HandleChange} type="checkbox"></input></span>Бесплатные</div>
-                        <div className='mo-block-body-text'><span><input checked={options.statusempty} name="statusempty" onChange={HandleChange} type="checkbox"></input></span>Только Свободные</div>
+                        <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.statusfree} name="statusfree" onChange={HandleChange} type="checkbox"></input></span>Бесплатные</div>
+                        <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.statusempty} name="statusempty" onChange={HandleChange} type="checkbox"></input></span>Только Свободные</div>
                     </div>
                 </div>
                 <div className='mo-block'>
@@ -63,8 +63,8 @@ const MapOptions = ({updateData}) => {
                         Тип
                     </div>
                     <div className='mo-block-body'>
-                        <div className='mo-block-body-text'><span><input checked={options.typefast} name="typefast" onChange={HandleChange} type="checkbox"></input></span>Скоростная</div>
-                        <div className='mo-block-body-text'><span><input checked={options.typeslow} name="typeslow" onChange={HandleChange} type="checkbox"></input></span>Обычная</div>
+                        <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.typefast} name="typefast" onChange={HandleChange} type="checkbox"></input></span>Скоростная</div>
+                        <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.typeslow} name="typeslow" onChange={HandleChange} type="checkbox"></input></span>Обычная</div>
                     </div>
                 </div>
                 <div className='mo-block'>
@@ -72,12 +72,12 @@ const MapOptions = ({updateData}) => {
                         ПОрт
                     </div>
                     <div className='mo-block-body'>
-                        <div className='mo-block-body-text'><span><input checked={options.portCCS} name="portCCS" onChange={HandleChange}  type="checkbox"></input></span>CCS</div>
-                        <div className='mo-block-body-text'><span><input checked={options.portType2} name="portType2" onChange={HandleChange}  type="checkbox"></input></span>Type2</div>
-                        <div className='mo-block-body-text'><span><input checked={options.portCHAdeMO} name="portCHAdeMO" onChange={HandleChange}  type="checkbox"></input></span>CHAdeMO</div>
-                        <div className='mo-block-body-text'><span><input checked={options.portJ1772} name="portJ1772" onChange={HandleChange}  type="checkbox"></input></span>J1772</div>
-                        <div className='mo-block-body-text'><span><input checked={options.portGB} name="portGB" onChange={HandleChange}  type="checkbox"></input></span>GB/T</div>
-                        <div className='mo-block-body-text'><span><input checked={options.portSocket220V} name="portSocket220V" onChange={HandleChange}  type="checkbox"></input></span>Socket 220V</div>
+                        <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.portCCS} name="portCCS" onChange={HandleChange}  type="checkbox"></input></span>CCS</div>
+                        <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.portType2} name="portType2" onChange={HandleChange}  type="checkbox"></input></span>Type2</div>
+                        <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.portCHAdeMO} name="portCHAdeMO" onChange={HandleChange}  type="checkbox"></input></span>CHAdeMO</div>
+                        <div className='mo-block-body-text'><span><input className='mo-block-inbut'checked={options.portJ1772} name="portJ1772" onChange={HandleChange}  type="checkbox"></input></span>J1772</div>
+                        <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.portGB} name="portGB" onChange={HandleChange}  type="checkbox"></input></span>GB/T</div>
+                        <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.portSocket220V} name="portSocket220V" onChange={HandleChange}  type="checkbox"></input></span>Socket 220V</div>
   
                     </div>
                 </div>

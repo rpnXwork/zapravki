@@ -1,24 +1,29 @@
-import React, {useEffect, useState}  from 'react';
+import React, {useEffect, useState, useContext}  from 'react';
 import {MapContainer, TileLayer} from "react-leaflet";
-import { useLocation } from "react-router-dom"
+import { useLocation, useParams } from "react-router-dom"
 // import MarkerClusterGroup from 'react-leaflet-markercluster'
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import MapOptions from './MapOptions';
 import './MapPage.css';
-import Test from './Test';
+import MyLocation from './MyLocation';
 import Markers from './Markers'
 import {w3cwebsocket as W3CWebSocket} from 'websocket';
+import {MarkerContext} from '../../context/MarkerContext'
+import {SOCKET} from '../../api'
 
-const adress = 'ws://192.168.0.64:8886'
-const ws = new W3CWebSocket(adress);
+const ws = new W3CWebSocket(SOCKET);
 
 const MapPage = () => {
 
+    let loc = localStorage.getItem("mappage")
+    const {pathname} = useLocation();
+
     const [state, setState] = useState()
     const [newdata, setNwedata] = useState()
-    const [map, setMap] = useState()
     const [options, setOptions] = useState()
     const [conected, setConected] = useState(false)
+    
+    const [markers, setMarkers] = useContext(MarkerContext)
 
     ws.onerror = function() {
         console.log('Connection Error');
@@ -49,22 +54,36 @@ const MapPage = () => {
         }
     }
 
-    const { pathname } = useLocation();
-
     useEffect(() => {
         if (pathname === '/map'){
             window.scrollTo(0, 0);
         }
-
-    }, [pathname]);
-
+        if(ws&&conected) {
+          ws.send('givedata')  
+        }
+        
+    }, [conected, pathname]);
 
     useEffect(()=>{
         if(conected){
             ws.send('givedata')
-            console.log('data response')
         }
+        setState(markers)
     },[conected])
+
+
+
+    console.log(conected)
+
+    // useEffect(()=>{
+    //     setInterval(() => {
+    //         if(conected === false){
+    //             window.location.reload()
+    //         }    
+    //     }, 2000)
+    //     console.log('reload')
+        
+    // },[conected])
 
     useEffect(()=>{
 
@@ -80,7 +99,13 @@ const MapPage = () => {
 
     },[newdata])
 
-    useEffect(()=>{},[state])
+    useEffect(() => {
+        localStorage.setItem("path", JSON.stringify("/map"))
+    }, [])
+
+    useEffect(()=>{
+        setMarkers(state)
+    },[state])
 
     useEffect(()=>{
         if (conected) {
@@ -96,15 +121,16 @@ const MapPage = () => {
 
     return (
         <>
+        {/* <Test props={state}/> */}
         <div className='map-window'>
             <MapOptions  updateData={updateOptions} />
             <div className='map-body'>
-                <MapContainer fullscreenControl={true} maxZoom={18} whenCreated={setMap} center={[53.90757424711361,27.554397583007812]} zoom={12} scrollWheelZoom={true} >
+                <MapContainer fullscreenControl={true} maxZoom={18} center={[53.90757424711361,27.554397583007812]} zoom={12} scrollWheelZoom={true} >
                     <TileLayer
                         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" 
                     />
-                    <Test map={map}/>
+                    <MyLocation/>
                     {/* <MarkerClusterGroup animate={false} spiderfyOnMaxZoom={true} showCoverageOnHover={false} zoomToBoundsOnClick={true} >
                                           
                     </MarkerClusterGroup> */}
