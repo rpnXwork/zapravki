@@ -17,9 +17,6 @@ import { faEyeSlash  } from '@fortawesome/free-solid-svg-icons'
 
 import ReactCodeInput from 'react-verification-code-input';
 
-
-
-
 export const RegistrationPage = () => {
 
     const message = useMessage()

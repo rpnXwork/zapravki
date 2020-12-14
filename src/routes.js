@@ -35,7 +35,7 @@ export const useRoutes = ({isAuthenticated,id}) => {
         <Route path="/user" exact>
           <Redirect to={`/user/${id}`} />
         </Route>
-        {loc?<Redirect to={loc} exact/>:<Redirect to="/"/>}
+        {loc==='/map'?<Redirect to={loc} />:<Redirect to="/"/>}
       </Switch>
     )
   } 

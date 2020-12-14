@@ -73,8 +73,8 @@ export default function User() {
                         <div className='user-text'>+{phoneNumber}</div>
                     </div>
                     <div className='user-point'>
-                        <div className='user-tittle'>Бабос:</div>
-                        <div className='user-text'> {money}$</div>
+                        <div className='user-tittle'>Текущий счет:</div>
+                        <div className='user-text'> {money}</div>
                     </div>
                </div>
                <div className='user-row'>
