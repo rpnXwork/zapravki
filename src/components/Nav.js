@@ -15,24 +15,31 @@ import {AuthContext} from '../context/AuthContext'
 
 function Nav() {
 
+    let loc = JSON.parse(localStorage.getItem("path"))
+
     let location = useLocation()
     const auth = useContext(AuthContext)
     let gg = location.pathname
     const history = useHistory()
-    const {token, userId, nickname} = useContext(AuthContext)
+    const {token, id, firstName} = useContext(AuthContext)
 
     const [isActive, setIsActive] = useState(false)
     const [scrollPosition, setScrollPosition] = useState(0);
+    
     const handleScroll = () => {
         const position = window.pageYOffset;
         setScrollPosition(position);
     };
 
+    const setPath = () => {
+        localStorage.setItem("path", JSON.stringify("/user"))
+    }
+
     
     const logoutHandler = event => {
         event.preventDefault()
         auth.logout()
-        history.push('/')}
+        history.push(loc)}
 
 
     useEffect(() => {
@@ -67,13 +74,13 @@ function Nav() {
                 <div className='nav-menu'>
                     {token?
                     <div>
-                        <NavLink to={`/user/${userId}`}><span className='menu-item menu-item-p'>
-                            <FontAwesomeIcon icon={faUser} size="xl"/>
-                            &nbsp; Кабинет пользователя {nickname}</span>
+                        <NavLink to={`/user/${id}`}><span className='menu-item menu-item-p'>
+                            <FontAwesomeIcon icon={faUser} size="lg"/>
+                            &nbsp; Кабинет пользователя {firstName}</span>
                         </NavLink>
                         <span><FontAwesomeIcon className='logout'  onClick={logoutHandler} icon={faSignOutAlt} size='2x'/></span>
                     </div>:
-                        <NavLink to='login'><div className='menu-item menu-item-p'>
+                        <NavLink to='/login' onClick={setPath}><div className='menu-item menu-item-p'>
                             <FontAwesomeIcon icon={faUser} size="lg"/> &nbsp; Личный кабинет</div>
                      </NavLink>
                      }
