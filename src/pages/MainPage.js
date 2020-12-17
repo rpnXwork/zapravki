@@ -1,16 +1,26 @@
 import React, {useEffect, useState, useContext}  from 'react';
 import './style/MainPage.css'
+import {useLocation, useParams} from "react-router-dom"
 import Carousel from '../components/Carousel'
 import video from './style/video/video.mp4'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBusinessTime, faShoppingCart, faHome, faMale, faCogs, faRocket, faPlug, faCopyright, faMobileAlt, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
-import { NavLink } from 'react-router-dom'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faBusinessTime, faShoppingCart, faHome, faMale, faCogs, faRocket, faPlug, faCopyright, faMobileAlt, faMapMarkerAlt} from '@fortawesome/free-solid-svg-icons'
+import {NavLink} from 'react-router-dom'
 
 function MainPage() {
+
+    const { pathname } = useLocation();
 
     useEffect(() => {
         localStorage.removeItem("mappage")
     }, [])
+
+    useEffect(() => {
+        if (pathname === '/'){
+            window.scrollTo(0, 0);
+        }
+
+    }, [pathname]);
 
     return (
         <>  

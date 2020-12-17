@@ -1,6 +1,7 @@
 import React, {useContext, useState,useEffect} from 'react'
-import {Redirect, useParams} from "react-router-dom";
-import './Test.css'
+import {Redirect, useParams} from "react-router-dom"
+import './Connectors.css'
+import M from 'materialize-css/dist/js/materialize.min.js'
 
 import Type1service from './images/Type1service.png'
 import Type1busy from './images/Type1busy.png'
@@ -18,38 +19,42 @@ import Type2build from './images/Type2build.png'
 import Type2reserved from './images/Type2reserved.png'
 import Type2connected from './images/Type2connected.png'
 
-import close from './images/close.png'
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes  } from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faTimes} from '@fortawesome/free-solid-svg-icons'
 
 import {NavLink} from 'react-router-dom'
 import {MarkerContext} from '../context/MarkerContext'
 import {AuthContext} from '../context/AuthContext'
-import {Loaderr} from './Loaderr';
+import {Loaderr} from './Loaderr'
+import {useHttp} from '../hooks/http.hook'
+import {useMessage} from '../hooks/message.hook'
+import {API, PORT} from '../api'
 
-import CounterInput from "../components/CounterInput";
+import CounterInput from "./CounterInput"
 
+const Connectors = () => {
 
-
-const Test = () => {
-
-    const {id} = useParams()
+    const {conectorId} = useParams()
     const [markers] = useContext(MarkerContext)
-    const {isAuthenticated, token} = useContext(AuthContext)
+    const {isAuthenticated, token , id, setChargeid}  = useContext(AuthContext)
+    const {request, error, clearError} = useHttp()
+    const message = useMessage()
+    const [mes, setMes] = useState(null)
 
-    const [state, setState] = useState()
+    const [state, setState] = useState(null)
 
-    const [work, setWork] = useState()
-    const [busy, setBusy] = useState()
-    const [alert, setAlert] = useState()
-    const [service, setService] = useState()
-    const [build, setBuild] = useState()
-    const [reserved, setReserved] = useState()   
-    const [connected, setConnected] = useState()
+    const [work, setWork] = useState([])
+    const [busy, setBusy] = useState([])
+    const [alert, setAlert] = useState([])
+    const [service, setService] = useState([])
+    const [build, setBuild] = useState([])
+    const [reserved, setReserved] = useState([])   
+    const [connected, setConnected] = useState([])
+    const [status, setStatus] = useState(false)
 
     const [charge, setCharge] = useState(false)
     const [reserv, setReserv] = useState(false)
+    const [action, setAction] = useState(null)
     const [checked, setChecked] = useState({
         0: false,
         1: false
@@ -63,9 +68,36 @@ const Test = () => {
     const [unlim, setUnlim] = useState(false)
     const [unlimmess, setUnlimmess] = useState(false)
 
+    useEffect(() => {
+        if (!work.length && !connected.length){
+            setChecked({
+                1: false,
+                2: false   
+            })
+            setHour(false)
+            setHourmess(false)
+            setCharge(false)
+            setReserv(false)
+            setUnlim(false)
+            setUnlimmess(false)
+        }
+        console.log('wfewf')
+        
+    }, [work,
+        connected,])
 
     useEffect(() => {
-        if (work && work.length === 0){
+        message(mes)
+        message(error)
+        setMes(null)
+        clearError()
+      }, [error, mes, message, clearError])
+      useEffect(() => {
+        M.updateTextFields()
+      }, [])
+
+    useEffect(() => {
+        if (work && work === 0){
             setChecked({
                 0: false,
                 1: false
@@ -74,7 +106,7 @@ const Test = () => {
             setCharge(false)
             setReserv(false)
             setCountCharge(0)
-            setCountReserv(0)
+            // setCountReserv(0)
         }
     }, [work])
 
@@ -120,12 +152,25 @@ const Test = () => {
             })
     }
 
+    const gg = (data) => {
+        data.map((key)=>{
+            if (String(key.id) === conectorId){
+                setState(key)
+            }
+        })
+    }
+
     useEffect(() => {
         if (markers && markers !== null) {
-            setState(markers[id-1])
-            arraycreator(markers[id-1].connectors)
+            gg(markers)
         }
     }, [markers])
+
+    useEffect(() => {
+        if (state !== null){
+            arraycreator(state.connectors)
+        }
+    }, [state])
 
     const changeHandler = event => {
         if (event.target.name === "1" && checked[1] === false) {
@@ -139,13 +184,21 @@ const Test = () => {
                 1: false,
                 2: false
             })
-            setPort(0)
+            setHour(false)
+            setReserv(false)
+            setCharge(false)
+            setCountCharge(0)
+            // setCountReserv(0)
         } else if  (event.target.name === "2" && checked[2] === true) {
             setChecked({
                 1: false,
                 2: false
             })
-            setPort(0)
+            setHour(false)
+            setReserv(false)
+            setCharge(false)
+            setCountCharge(0)
+            // setCountReserv(0)
         } else {
             setChecked({
                 1: false,
@@ -155,12 +208,31 @@ const Test = () => {
         }
     }
 
+    const startcharge = async () => {
+        try{
+            const data = await request(`${API}${PORT}/chargepoint/${conectorId}/start/${action}/${port}/${id}?energy=${countCharge}`, 'POST','')
+            setChargeid(conectorId,id)
+            setChecked({
+                1: false,
+                2: false   
+            })
+            setReserv(false)
+            setCharge(false)
+            setMes(data.message)
+            if (data.status === 'ok') {
+                setStatus(true)
+            }
+        } catch(e){
+        }    
+    }
+
+
     const Connector = ({props , status, num}) => {
 
         return(                            
             <div className="station-connector">
             <div className="station-connector-body">                            
-                {status === "work" ?<div className="station-connector-picker"><input name={`${num}`} className='input-checkbox' type='checkbox' checked={checked[num]} onChange={(e)=>{changeHandler(e)}}></input></div >:<div style={{width:"26px"}}></div>}
+                {status === "work" || status === 'connected'?<div className="station-connector-picker"><input name={`${num}`} className='input-checkbox' type='checkbox' checked={checked[num]} onChange={(e)=>{changeHandler(e)}}></input></div >:<div style={{width:"26px"}}></div>}
                 <div className="station-connector-img">
                    <Image type = {props.type} status={status}/>
                    
@@ -278,7 +350,11 @@ const Test = () => {
 
     if (markers === null) {
         return ( <Redirect to='/map'/>)
-    } 
+    }
+
+    if (status) {
+        return ( <Redirect to='/map'/>)
+    }
 
     return (
         <>
@@ -302,91 +378,117 @@ const Test = () => {
                     </div>:<Loaderr/>}
                     <div className="station-connectors">
 
-                        {(state && work.length)?<div className="station-connector-tittle" style={{backgroundColor: "#41a350"}}>Доступны</div>:<div></div>}
+                        {(state !== null && work.length)?<div className="station-connector-tittle" style={{backgroundColor: "#41a350"}}>Доступны</div>:<div></div>}
                         {work?
                         work.map((key, i)=>
-                        <Connector props = {key} key={i} status = {"work"} num={key.number}/>)
+                        <Connector props = {key} key={key.number} status = {"work"} num={key.number}/>)
                         :<div>load</div>}
 
-                        {(state && busy.length)?<div className="station-connector-tittle" style={{backgroundColor: "#00B0E6"}}>Заняты</div>:<div></div>}
+                        {(state !== null && busy.length)?<div className="station-connector-tittle" style={{backgroundColor: "#00B0E6"}}>Заняты</div>:<div></div>}
                         {busy?
                         busy.map((key, i)=>
-                        <Connector props = {key} key={i} status = {"busy"} num={key.number}/>)
+                        <Connector props = {key}key={key.number} status = {"busy"} num={key.number}/>)
                         :<div>load</div>}
 
-                        {(state && reserved.length)?<div className="station-connector-tittle" style={{backgroundColor: "#C416FF"}}>Зарезервированы</div>:<div></div>}
+                        {(state !== null && reserved.length)?<div className="station-connector-tittle" style={{backgroundColor: "#C416FF"}}>Зарезервированы</div>:<div></div>}
                         {reserved?
                         reserved.map((key, i)=>
-                        <Connector props = {key} key={i} status = {"reserved"} num={key.number}/>)
+                        <Connector props = {key}key={key.number} status = {"reserved"} num={key.number}/>)
                         :<div>load</div>}
 
-                        {(state && connected.length)?<div className="station-connector-tittle" style={{backgroundColor: "#E5BB12"}}>Подключены</div>:<div></div>}
+                        {(state !== null && connected.length)?<div className="station-connector-tittle" style={{backgroundColor: "#E5BB12"}}>Подключены</div>:<div></div>}
                         {connected?
                         connected.map((key, i)=>
-                        <Connector props = {key} key={i} status = {"connected"} num={key.number}/>)
+                        <Connector props = {key}key={key.number} status = {"connected"} num={key.number}/>)
                         :<div>load</div>}
                         
-                        {(state && service.length)?<div className="station-connector-tittle" style={{backgroundColor: "#A3A6AB"}}>Сервис</div>:<div></div>}
+                        {(state !== null && service.length)?<div className="station-connector-tittle" style={{backgroundColor: "#A3A6AB"}}>Сервис</div>:<div></div>}
                         {service?
                         service.map((key, i)=>
-                        <Connector props = {key} key={i} status = {"service"} num={key.number}/>)
+                        <Connector props = {key}key={key.number} status = {"service"} num={key.number}/>)
                         :<div>load</div>}
 
-                        {(state && alert.length)?<div className="station-connector-tittle" style={{backgroundColor: "#FF3549"}}>Пиздец</div>:<div></div>}
+                        {(state !== null && alert.length)?<div className="station-connector-tittle" style={{backgroundColor: "#FF3549"}}>Пиздец</div>:<div></div>}
                         {alert?
                         alert.map((key, i)=>
-                          <Connector props = {key} key={i} status = {"alert"} num={key.number}/>)
+                          <Connector props = {key}key={key.number} status = {"alert"} num={key.number}/>)
                         :<div>load</div>}
 
-                        {(state && build.length)?<div className="station-connector-tittle" style={{backgroundColor: "#404040"}}>Строятся</div>:<div></div>}
+                        {(state !== null && build.length)?<div className="station-connector-tittle" style={{backgroundColor: "#404040"}}>Строятся</div>:<div></div>}
                         {build?
                         build.map((key, i)=>
-                        <Connector props = {key} key={i} status = {"build"} num={key.number}/>)
+                        <Connector props = {key}key={key.number} status = {"build"} num={key.number}/>)
                         :<div>load</div>}
 
                     </div>
-                    {checked[1]?
+                    {checked[1] && state.connectors[0].status === 'work'?
                     <div className='station-body-buttons'>
                         <button className='station-body-button' style={charge?{backgroundColor: '#41a350'}:{backgroundColor: '#A3A6AB'}} onClick={()=>{
                             setCharge(true)
+                            setAction('charge')
                             setHour(true)
                             setHourmess(true)
                             setReserv(false)
-                            }}>Зарядить1</button>
+                            }}>Зарядить</button>
                         <button className='station-body-button' style={reserv?{backgroundColor: '#C416FF'}:{backgroundColor: '#A3A6AB'}} onClick={()=>{
                             setReserv(true)
                             setCharge(false)
-                            setCharge(false)
-                            }}>Резервировать1</button>
+                            setHour(false)
+                            setHourmess(false)
+                            setAction('reserve')
+                            }}>Резервировать</button>
                     </div>:
-                    checked[2]?
+                    checked[1] && state.connectors[0].status === 'connected'?
+                    <div className='station-body-buttons'>
+                    <button className='station-body-button' style={charge?{backgroundColor: '#E5BB12'}:{backgroundColor: '#A3A6AB'}} onClick={()=>{
+                        setCharge(true)
+                        setAction('charge')
+                        setHour(true)
+                        setHourmess(true)
+                        setReserv(false)
+                        }}>Зарядить</button>
+                </div>:
+                    checked[2] && state.connectors[1].status === 'work'?
                     <div className='station-body-buttons'>
                         <button className='station-body-button' style={charge?{backgroundColor: '#41a350'}:{backgroundColor: '#A3A6AB'}} onClick={()=>{
                             setCharge(true)
+                            setAction('charge')
                             setHour(true)
                             setHourmess(true)
                             setReserv(false)
-                            }}>Зарядить2</button>
+                            }}>Зарядить</button>
                         <button className='station-body-button' style={reserv?{backgroundColor: '#C416FF'}:{backgroundColor: '#A3A6AB'}} onClick={()=>{
                             setReserv(true)
                             setCharge(false)
-                            setCharge(false)
-                            }}>Резервировать2</button>
+                            setHour(false)
+                            setAction('reserve')
+                            setHourmess(false)
+                            }}>Резервировать</button>
                     </div>:
+                    checked[2] && state.connectors[1].status === 'connected'?
+                    <div className='station-body-buttons'>
+                    <button className='station-body-button' style={charge?{backgroundColor: '#E5BB12'}:{backgroundColor: '#A3A6AB'}} onClick={()=>{
+                        setCharge(true)
+                        setAction('charge')
+                        setHour(true)
+                        setHourmess(true)
+                        setReserv(false)
+                        }}>Зарядить</button>
+                </div>:
                     <div></div>}
                     {reserv?
                     <div className='reserv-body'>
                         <CounterInput
-                            count = {countReserv}
+                            count = {countCharge}
                             placeholder='mm'
                             min={0}
                             max={500}
-                            onCountChange={count => setCountReserv(count)}
+                            onCountChange={count => setCountCharge(count)}
                             />
                         <div className='reserv-tittle'>Итого:</div>
-                        {state.connectors[port-1]?<div className='reserv-count'>{countReserv * Math.round(state.connectors[port-1].tariffs.reserve*100)/100}</div>:<div></div>}
+                        {state.connectors[port-1]?<div className='reserv-count'>{countCharge * Math.round(state.connectors[port-1].tariffs.reserve*100)/100}</div>:<div></div>}
                         <div className='reserv-UAH'>UAH</div>
-                        <button className='station-body-button reserv-btn' style={{backgroundColor: '#C416FF'}}>Зарезервировать</button>
+                        <button className='station-body-button reserv-btn' onClick={()=>{startcharge()}} style={{backgroundColor: '#C416FF'}}>Зарезервировать</button>
                     </div>:
                     charge?
                     <div className='connector-charge-btn'>
@@ -448,19 +550,18 @@ const Test = () => {
                             <div></div>}
                             <div className='reserv-tittle'>Итого:</div>
                             {state.connectors[port-1]&&hour?
-                            <div className='reserv-count'>{countCharge * Math.round(state.connectors[port-1].tariffs.charge*100)/100 }</div>:
+                            <div className='reserv-count'>{countCharge * Math.round(state.connectors[port-1].tariffs.charge*100)/100}</div>:
                             <div className='reserv-count'>{100 * Math.round(state.connectors[port-1].tariffs.charge*100)/100}</div>}
-                            
                             <div className='reserv-UAH'>UAH</div>
-                            <button className='station-body-button reserv-btn' style={{backgroundColor: '#41a350'}}>Зарезервировать</button>
+                            <button className='station-body-button reserv-btn' onClick={()=>{startcharge()}} style={{backgroundColor: '#41a350'}}>Зарядить</button>
+                            {connected.length?<div>weifhwefuwegbf</div>:<div></div>}
                     </div>:
                     <div></div>
                     }
-                    
                 </div>
              </div>
         </>
     )
 }
 
-export default Test
+export default Connectors

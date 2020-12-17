@@ -12,6 +12,7 @@ import {useState} from 'react';
 function App() {
 
   const [markers, setMarkers] = useState()
+  const [chargeid, setChargeid] = useState()
   const {id, token, emailConfirmed, phoneNumber, email, firstName, lastName, gender, birthdate, login, logout, ready} = useAuth()
   const isAuthenticated = !!token
   const routes = useRoutes({isAuthenticated,id})
@@ -25,7 +26,7 @@ function App() {
 
   return (
     <MarkerContext.Provider value = {[markers, setMarkers]} >
-      <AuthContext.Provider value={{id, token, emailConfirmed, phoneNumber, email, firstName, lastName, gender, birthdate, login, logout, isAuthenticated
+      <AuthContext.Provider value={{id, token, emailConfirmed, phoneNumber, email, firstName, lastName, gender, birthdate, login, logout, isAuthenticated, setChargeid ,chargeid
       }}>
 
         <Router>

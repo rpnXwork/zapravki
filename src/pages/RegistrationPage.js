@@ -1,21 +1,20 @@
 import React, {useState, useEffect, Children} from 'react';
 import {NavLink, useLocation ,useParams } from 'react-router-dom';
 import {useMessage} from '../hooks/message.hook';
-import {useHttp} from '../hooks/http.hook';
-import jwt from 'jsonwebtoken';
-import { Timer } from '../components/Timer';
-import { Loaderr } from '../components/Loaderr';
+import {useHttp} from '../hooks/http.hook'
+import jwt from 'jsonwebtoken'
+import {Timer} from '../components/Timer'
+import {Loaderr} from '../components/Loaderr';
 import {API, PORT} from '../api'
 import PhoneInput from 'react-phone-input-2'
 import './style/React-telinput.css'
 import './style/RegistrationPage.css'
-import DatePicker from 'react-date-picker';
+import DatePicker from 'react-date-picker'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye  } from '@fortawesome/free-solid-svg-icons'
-import { faEyeSlash  } from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons'
 
-import ReactCodeInput from 'react-verification-code-input';
+import ReactCodeInput from 'react-verification-code-input'
 
 export const RegistrationPage = () => {
 

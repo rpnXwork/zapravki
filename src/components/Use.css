@@ -1,0 +1,73 @@
+.charge-body {
+    margin: 170px auto;
+}
+
+.use-charge {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    justify-content: space-between;
+    padding-bottom: 25px;
+}
+
+.charge-img {
+    height: 75px;
+}
+
+.use-charge-centre {
+    border: 30px solid green;
+    border-radius: 50%;
+    height: 20vh;
+    width: 20vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.use-charge-connector {
+    margin: 3vh auto 1vh;
+}
+
+.usecharge-counter {
+    margin: 1vh auto;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.use-charge-right {
+    text-align: end;
+}
+.station-opt {
+    padding-bottom: 20px;
+}
+
+.use-btn-text {
+    text-align: center;
+}
+
+.use-btn-calk {
+    border: 1px solid rgb(194, 193, 193);
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background-color: rgb(240, 240, 240);
+}
+
+.use-btn {
+    background-color: #FF3549;
+}
+
+
+
+.use-btn-block {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 25px;
+}
+
+.use-btn-text {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 10px;
+}

@@ -1,6 +1,6 @@
 import React from 'react'
 import {Switch, Route, Redirect} from 'react-router-dom'
-import Test from './components/Test';
+import Connectors from './components/Connectors';
 import {AuthPage} from './pages/AuthPage'
 import MainPage from './pages/MainPage';
 import MapPage from './pages/MapPage/MapPage';
@@ -22,9 +22,9 @@ export const useRoutes = ({isAuthenticated,id}) => {
         <Route path="/map" exact>
           <MapPage/>
         </Route>
-        <Route path="/map/station:id" exact>
+        <Route path="/map/station:conectorId" exact>
         <MapPage />
-          <Test />
+          <Connectors />
         </Route>
         <Route path="/user/:id" exact>
           <User/>
@@ -49,8 +49,8 @@ export const useRoutes = ({isAuthenticated,id}) => {
           <MapPage />
         </Route>
         <Route path="/map/station:id" exact>
-        <MapPage />
-          <Test />
+          <MapPage />
+          <Connectors />
         </Route>
         <Route path="/login" exact>
           <AuthPage />

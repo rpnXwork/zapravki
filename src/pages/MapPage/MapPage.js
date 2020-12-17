@@ -1,47 +1,65 @@
 import React, {useEffect, useState, useContext, useRef}  from 'react';
 import {MapContainer, TileLayer} from "react-leaflet";
-import { useLocation, useParams } from "react-router-dom"
+import {useLocation, useParams} from "react-router-dom"
 import 'react-leaflet-markercluster/dist/styles.min.css';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
+import {AuthContext} from '../../context/AuthContext'
+
 import MapOptions from './MapOptions';
 import './MapPage.css';
 import MyLocation from './MyLocation';
 import Markers from './Markers'
 import {MarkerContext} from '../../context/MarkerContext'
-import { SOCKET } from '../../api';
-// import {w3cwebsocket as W3CWebSocket} from 'websocket';
+import {SOCKET} from '../../api';
+import Use from '../../components/Use';
 
-// const ws = new W3CWebSocket(adress);
 
 const MapPage = () => {
 
+    const {isAuthenticated, token, id, chargeid} = useContext(AuthContext)
     const ws = useRef(null)
-
     const [state, setState] = useState()
     const [newdata, setNwedata] = useState()
     const [map, setMap] = useState()
     const [options, setOptions] = useState()
     const [conected, setConected] = useState(false)
+    const [charging, setCharging] = useState(false)
+    const [close, setClose] = useState(false)
+    const [chargeData, setChargeData] = useState()
+
     
     const [markers, setMarkers] = useContext(MarkerContext)
 
     useEffect(() => {
         ws.current = new WebSocket(SOCKET);
-        ws.current.onopen = () => console.log("ws opened", new Date());
-        ws.current.onclose = () => console.log("ws closed", new Date());
+        
+        ws.current.onopen = () => {
+            console.log('socket open')
+            getChargingStatus()
+            setConected(true)
+        }
+
+        ws.current.onclose = () => {
+            console.log('socket close')
+            setConected(false)
+            setClose(true)
+        }
 
         ws.current.onmessage = e => {
         const data = JSON.parse(e.data);
         if 
         (data.type === 'data'){
             setState(data.features)
-            console.log('get Data', new Date())
-            setConected(true)
         }
         if 
         (data.type === "update"){
             setNwedata(data.features)
-            console.log('update Data', new Date())
-            setConected(true)
+            
+        }
+        if 
+        (data.type === "charge"){
+            setCharging(true)
+            setChargeData(data)
         }
     }
 
@@ -53,6 +71,13 @@ const MapPage = () => {
     const { pathname } = useLocation();
 
     useEffect(() => {
+        if(close) { 
+            ws.current = new WebSocket(SOCKET);
+            setClose(false)
+        }
+    }, [close])
+
+    useEffect(() => {
         if (pathname === '/map'){
             window.scrollTo(0, 0);
         }
@@ -60,15 +85,15 @@ const MapPage = () => {
     }, [pathname]);
 
     useEffect(()=>{
-
         if (state && newdata){
-            newdata.forEach((key)=>(
-                setState(prevState => {
-                    let state = Object.assign({}, prevState); 
-                    state[key.id-1].connectors = key.connectors
-                    return Object.values(state)                  
-                  })
-            ))        
+            setState(state.map((key,i)=>{
+                newdata.map((newdataitem, i)=>{
+                    if (key.id === newdataitem.id){
+                        key = newdataitem
+                    }
+                })
+                return key
+            }))
         } 
 
     },[newdata])
@@ -88,11 +113,25 @@ const MapPage = () => {
     },[state])
 
     useEffect(()=>{
-        if (conected) {
+        if (ws && conected) {
             ws.current.send(JSON.stringify(options))
             console.log("New Options Sent", JSON.stringify(options))
         }
     },[options])
+
+    useEffect(()=>{
+        if (chargeid !== undefined) {
+            ws.current.send(JSON.stringify({id: chargeid}))
+            console.log('sent id')
+        }
+    },[chargeid])
+
+    const getChargingStatus = () =>{
+        if (isAuthenticated) {
+            ws.current.send(JSON.stringify({id : id}))
+            console.log("user sent", {id : id})
+        }
+    }
 
     const updateOptions = (e) => {
         setOptions(e)
@@ -111,14 +150,14 @@ const MapPage = () => {
                     />
                     <MyLocation map={map}/>
                     {/* <MarkerClusterGroup animate={false} spiderfyOnMaxZoom={true} showCoverageOnHover={false} zoomToBoundsOnClick={true} >
-                                          
+                                       
                     </MarkerClusterGroup> */}
                     {state?state.map((key,i) =>
                             <Markers props = {key} key = {i} />       
                         ):<div></div>
-                    } 
-
+                    }   
                 </MapContainer>
+                {isAuthenticated && charging? <Use  props= {chargeData}/>:<div></div>}
             </div>
         </div>
         </>

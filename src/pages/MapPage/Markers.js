@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useContext}  from 'react';
-import { Marker, Popup } from "react-leaflet";
+import React, { useState, useEffect, useContext}  from 'react'
+import { Marker, Popup } from "react-leaflet"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {MarkerContext} from '../../context/MarkerContext'
 import { faClock  } from '@fortawesome/free-solid-svg-icons'
 import './Markers.css'
 import {
@@ -74,7 +75,8 @@ import {AuthContext} from '../../context/AuthContext'
 
 
 const  Popups = ({props}) => {
-    const {isAuthenticated, token} = useContext(AuthContext)
+    const [markers] = useContext(MarkerContext)
+    const {isAuthenticated} = useContext(AuthContext)
 
     const [state, setState] = useState(props)
     const [work, setWork] = useState(false)
@@ -84,17 +86,28 @@ const  Popups = ({props}) => {
         }, [props])
 
         useEffect(() => {
-            if (state.connectors.length > 1 ){
-                if (state.connectors[0].status ==='work' || state.connectors[1].status ==='work' ){
-                setWork(true)
+            setWork(false)
+            // console.log('falsed 0',state.id)
+            if (state.connectors.length  === 2 ){
+                if (state.connectors[0].status === 'work' || state.connectors[0].status === 'connected'){
+                    setWork(true)
+                    // console.log('trued 1 ',state.id)
+                } else if (state.connectors[1].status === 'work' || state.connectors[1].status === 'connected') {
+                    setWork(true)
+                    // console.log('trued 1-2 ',state.id)
+                } else {
+                    setWork(false)
                 }
-            }
-            if (state.connectors[0].status ==='work'){
-                setWork(true)
-                }
-            // setWork(false)
-            
-        }, [state])
+            } else if (state.connectors.length === 1 ){
+                if (state.connectors[0].status === 'work' || state.connectors[0].status === 'connected'){
+                    setWork(true)
+                    // console.log('trued 2 ',state.id)
+                }       
+            } else {
+                setWork(false)
+                // console.log('false 3',state.id)
+            }    
+        }, [markers])
 
     return (
         <>
@@ -104,7 +117,6 @@ const  Popups = ({props}) => {
                 <div className='popup-worktime'><FontAwesomeIcon className='popup-icon' icon={faClock} size="lg"/>{props.properties.worktime}</div>
                 <div className='popup-connectors'>
                     {state.connectors.map((key, i) => {
-
                         if (key.status === "work") {
                             return (  
                             <div className='popup-connector' key={i} style={{padding: '10px'}}>
@@ -200,9 +212,9 @@ const  Popups = ({props}) => {
                     })}
                 </div>
                 
-                {isAuthenticated && work?
+                {(isAuthenticated && work)?
                 <Link to={`map/station${state.id}`}> <button className='popup-btn'>Зарядиться</button></Link>:
-                 isAuthenticated && !work?<div>Нет доступных станций</div>:
+                 (isAuthenticated && !work)?<div>Нет доступных станций</div>:
                 <Link to='/login'> <button className='popup-btn'>Войти</button></Link>}
             </Popup>   
         </>
@@ -211,9 +223,6 @@ const  Popups = ({props}) => {
 }
 
 const Markers = ({props}) => {
-
-
-
 
     const [state, setState] = useState(props)
 

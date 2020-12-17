@@ -25,8 +25,6 @@ export const useAuth = () => {
     setBirthdate(data.birthdate)
     setToken(data.token)
     setEmailConfirmed(data.emailConfirmed)
-
-    console.log("SUCK!")
     
     localStorage.setItem(storageName, JSON.stringify({
       phoneNumber: data.phoneNumber,

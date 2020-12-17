@@ -5,21 +5,17 @@ import {useHttp} from '../hooks/http.hook'
 import {API, PORT} from '../api'
 import {useMessage} from '../hooks/message.hook'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheckCircle, faFemale, faMale, faTimesCircle  } from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faCheckCircle, faFemale, faMale, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
 
 export default function User() {
 
     const {id, token, emailConfirmed, phoneNumber, email, firstName, lastName, gender, birthdate} = useContext(AuthContext)
     const {request, error, clearError} = useHttp()
     const message = useMessage()
-    const storageName = 'userData'
     const [mes, setMes] = useState(null)
     const auth = useContext(AuthContext)
-    const [newdata, setNewdata] = useState()
     const [money, setMoney] = useState()
-
-    const data = JSON.parse(localStorage.getItem(storageName))
 
     useEffect(() => {
         message(mes)
@@ -35,11 +31,8 @@ export default function User() {
         try{
             const data = await request(`${API}${PORT}/verify/${email}`, 'POST')
             if(data){
-
             }
-
         } catch(e){
-
         }  
     } 
     const getmoney = async () => {
@@ -48,7 +41,6 @@ export default function User() {
             setMoney(data.message)
             setMes('money update')
         } catch(e){
-
         }  
     } 
 
