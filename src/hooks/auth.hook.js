@@ -14,6 +14,7 @@ export const useAuth = (session) => {
   const [gender, setGender] = useState(null)
   const [birthdate, setBirthdate] = useState(null)
   const [ready, setReady] = useState(false)
+  const [role, setRole] = useState(null)
   const [ss, setSs] = useState(session)
   
   useEffect(() => {
@@ -22,7 +23,7 @@ export const useAuth = (session) => {
 
   const login = useCallback((data,status = ss) => {
     console.log(status)
-    setId(data.id)
+    setId(data.id) 
     setPhoneNumber(data.phoneNumber)
     setEmail(data.email)
     setFirstName(data.firstName)
@@ -31,6 +32,7 @@ export const useAuth = (session) => {
     setBirthdate(data.birthdate)
     setToken(data.token)
     setEmailConfirmed(data.emailConfirmed)
+    setRole(data.role)
 
     if (status) {
       sessionStorage.setItem(storageName, JSON.stringify({
@@ -42,7 +44,8 @@ export const useAuth = (session) => {
       birthdate: data.birthdate,
       id: data.id,
       token: data.token,
-      emailConfirmed: data.emailConfirmed
+      emailConfirmed: data.emailConfirmed,
+      role: data.role
       }))
     } else {
       localStorage.setItem(storageName, JSON.stringify({
@@ -54,7 +57,8 @@ export const useAuth = (session) => {
       birthdate: data.birthdate,
       id: data.id,
       token: data.token,
-      emailConfirmed: data.emailConfirmed
+      emailConfirmed: data.emailConfirmed,
+      role: data.role
       }))
     }
   }, [ss])
@@ -69,6 +73,7 @@ export const useAuth = (session) => {
     setToken(null)
     setEmailConfirmed(null)
     setId(null)
+    setRole(null)
     
     localStorage.removeItem(storageName)
     sessionStorage.removeItem(storageName)
@@ -100,6 +105,7 @@ export const useAuth = (session) => {
     birthdate,
     login,
     logout,
-    ready
+    ready,
+    role
   }
 }

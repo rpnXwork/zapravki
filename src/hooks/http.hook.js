@@ -23,7 +23,7 @@ export const useHttp = () => {
       return data
 
     } catch (e) {
-        setError(e)
+        setError(`Ошибка: ${e}`)
         setLoading(false)
         throw e
     }

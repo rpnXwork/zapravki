@@ -4,18 +4,28 @@ import {AuthContext} from '../context/AuthContext'
 import {useHttp} from '../hooks/http.hook'
 import {API, PORT} from '../api'
 import {useMessage} from '../hooks/message.hook'
+import {useLocation} from "react-router-dom"
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faCheckCircle, faFemale, faMale, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
 
 export default function User() {
 
-    const {id, token, emailConfirmed, phoneNumber, email, firstName, lastName, gender, birthdate} = useContext(AuthContext)
+    const {id, role, emailConfirmed, phoneNumber, email, firstName, lastName, gender, birthdate} = useContext(AuthContext)
     const {request, error, clearError} = useHttp()
     const message = useMessage()
     const [mes, setMes] = useState(null)
     const auth = useContext(AuthContext)
     const [money, setMoney] = useState()
+    const { pathname } = useLocation();
+
+
+    useEffect(() => {
+        if (pathname === `/user/${id}`){
+            window.scrollTo(0, 0);
+        }
+
+    }, [pathname]);
 
     useEffect(() => {
         message(mes)
@@ -55,9 +65,9 @@ export default function User() {
                <div className='user-row'>
                     <div className='user-point'>
                         <div className='user-tittle'>Имя:</div>
-                        <div className='user-text'>{firstName}</div>
+                        <div className='user-text' style={role ==='admin'?{fontWeight:'600', cursor:'help'}:{}} title={role === 'admin'?'Admin':'user'}>{firstName}</div>
                     </div>
-                    <div className='user-point'>
+                    <div className='user-point' >
                         <div className='user-tittle'>Фамилия:</div>
                         <div className='user-text'>{lastName}</div>
                     </div>

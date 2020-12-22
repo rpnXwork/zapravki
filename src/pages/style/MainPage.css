@@ -572,6 +572,11 @@ button:focus {
     color: #fff;
     text-align: left;
     margin: 10px 0;
+    text-decoration: none;
+}
+
+.fc-item-text {
+    color: #fff
 }
 
 .fc-icon {

@@ -4,7 +4,6 @@ import {useLocation} from "react-router-dom"
 import 'react-leaflet-markercluster/dist/styles.min.css';
 // import MarkerClusterGroup from 'react-leaflet-markercluster';
 import {AuthContext} from '../../context/AuthContext'
-
 import MapOptions from './MapOptions';
 import './MapPage.css';
 import MyLocation from './MyLocation';
@@ -16,6 +15,7 @@ import Use from '../../components/Use';
 const MapPage = () => {
 
     const {isAuthenticated, id, chargeid} = useContext(AuthContext)
+    const { pathname } = useLocation();
     const ws = useRef(null)
     const [state, setState] = useState()
     const [newdata, setNwedata] = useState()
@@ -108,7 +108,7 @@ const MapPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [use])
 
-    const { pathname } = useLocation();
+
 
     useEffect(() => {
         if(close) { 
@@ -181,7 +181,6 @@ const MapPage = () => {
     const updUse = (e) => {
         setUse(!!e)
     }
-
 
     return (
         <>

@@ -224,7 +224,6 @@ export const RegistrationPage = () => {
         let month = mton(arr[1])
         
         let findatate = `${year}-${month}-${day}` 
-        console.log(findatate)
 
         setForm({...form,  "birthdate": findatate  })
     }

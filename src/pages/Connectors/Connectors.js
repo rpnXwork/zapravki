@@ -5,7 +5,6 @@ import M from 'materialize-css/dist/js/materialize.min.js'
 import {Image} from './ConnectorsImage'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
-
 import {NavLink} from 'react-router-dom'
 import {MarkerContext} from '../../context/MarkerContext'
 import {AuthContext} from '../../context/AuthContext'
@@ -78,7 +77,7 @@ const Connectors = () => {
       }, [])
 
     useEffect(() => {
-        if (work && work === 0){
+        if (work && work.length === 0){
             setChecked({
                 0: false,
                 1: false
@@ -91,7 +90,7 @@ const Connectors = () => {
     }, [work])
 
     useEffect(() => {
-        if (connected && connected === 0){
+        if (connected && connected.length === 0){
             setChecked({
                 0: false,
                 1: false
@@ -336,7 +335,7 @@ const Connectors = () => {
                         :<div>load</div>}
 
                     </div>
-                    {plug?<div onClick={()=>{setPlug(false)}} className='station-plug'><div className='plug-text'>Вставте конектор, когда состояние разьема изменится (желтый) начните зарядку.</div></div>:<div></div>}
+                    {plug?<div onClick={()=>{setPlug(false)}} className='station-plug'><div className='plug-text'>Вставте конектор, когда состояние разьема изменится (желтый) начните зарядку заново.</div></div>:<div></div>}
                     {checked[1] && state.connectors[0].status === 'work'?
                     <div className='station-body-buttons'>
                         <button className='station-body-button' style={charge?{backgroundColor: '#41a350'}:{backgroundColor: '#A3A6AB'}} onClick={()=>{
@@ -424,6 +423,7 @@ const Connectors = () => {
                             onClick={()=>{
                             setUnlim(true)
                             setUnlimmess(true)
+                            setCountCharge(1)
                             setHour(false)
                             setHourmess(false)
                             }}>Безлимитная</button>
@@ -468,8 +468,13 @@ const Connectors = () => {
                             {state.connectors[port-1]&&hour?
                             <div className='reserv-count'>{countCharge * Math.round(state.connectors[port-1].tariffs.charge*100)/100}</div>:
                             <div className='reserv-count'>{100 * Math.round(state.connectors[port-1].tariffs.charge*100)/100}</div>}
-                            <div className='reserv-UAH'>UAH</div>
-                            <button className='station-body-button reserv-btn' onClick={()=>{startcharge('energy')}} style={{backgroundColor: '#41a350'}}>Зарядить</button>
+                            <div className='reserv-UAH'>lmfkemfk</div>
+                            
+                            <button
+                            className='station-body-button reserv-btn'
+                            onClick={state.connectors[port-1]&&hour?()=>{startcharge('energy')}:
+                            state.connectors[port-1]&&unlim?()=>{startcharge('energy', 100)}:
+                            ()=>{startcharge("energy", 1)}} style={{backgroundColor: '#41a350'}}>Зарядить</button>
                     </div>:
                     <div></div>
                     }

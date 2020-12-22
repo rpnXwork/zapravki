@@ -39,15 +39,15 @@ function MainPage() {
                                 <div className='uvb-text'>
                                     Установка зарядных станций для 
                                     <br/>
-                                    Электромобиля Получай прибыль от
-                                    <span className='uvb-strong-text'>CNIITY CHARGER</span>
+                                    Электромобиля Получай прибыль от 
+                                    <span className='uvb-strong-text'> CNIITY CHARGER</span>
                                 </div>
                             </div>
                             <div className='undervideoblock'>
                                 <div className='uvb-icon'><FontAwesomeIcon icon={faShoppingCart} size="lg"/></div>
                                 <div className='uvb-tittle'>КУПИТЬ</div>
                                 <div className='uvb-text'>электрозаправку
-                                    <span className='uvb-strong-text'>CNIITY CHARGER</span>
+                                    <span className='uvb-strong-text'> CNIITY CHARGER</span>
                                 </div>
                             </div>
                             <div className='undervideoblock'>

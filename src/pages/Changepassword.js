@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import {useParams} from "react-router-dom";
 import {useMessage} from '../hooks/message.hook'
 import {Timer} from '../components/Timer';
 import {Loaderr} from '../components/Loaderr';
@@ -24,19 +23,6 @@ export const Changepassword = () => {
         window.M.updateTextFields()
       }, [])
 
-    const Confirmation = async () => {
-        try{
-            
-        } catch(e){
-        }  
-    }
-
-    useEffect(()=>{
-        setTimeout(() => {
-            Confirmation()
-        }, 2000);
-    },[])
-
     const emailHandler = event => {
         setEmail(event.target.value )
       }
@@ -49,19 +35,20 @@ export const Changepassword = () => {
     }
 
     const sentEmail = async () => {
-            try { 
-                const data = await request(`${API}${PORT}/changepassword/${email}`, 'POST')
-                setMes(data.message)
-                setLoad(true)
-            }
-            catch(e) {
-                
-            }
+        try { 
+            const data = await request(`${API}${PORT}/changepassword/${email}`, 'POST')
+            setMes(data.message)
+            setLoad(true)
+        }
+        catch(e) {
+            
+        }
     }
 
     if (load){ return (
         <div className="afterregblock">    
             <div className="activayionpage-text">
+                <Loaderr/>
                 Проверьте почту 
                   <Timer timeout={10000} adress={'/login'}/> sec.
             </div>

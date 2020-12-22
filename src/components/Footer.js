@@ -15,16 +15,14 @@ const Footer = () => {
                         Навигация
                     </div>
                     <div className='fc-body'>
-                        <div className='fc-item'>Главная</div>
-                        <div className='fc-item'>Купить заправку</div>
-                        <div className='fc-item'>Подключиться</div>
-                        <div className='fc-item'>Карта заправок</div>
-                        <div className='fc-item'>Калькулятор</div>
-                        <div className='fc-item'>Мобильное приложение</div>
-                        <div className='fc-item'>Заработать</div>
-                        <div className='fc-item'>Сертификаты</div>
-                        <div className='fc-item'>Контакты</div>
-                        <div className='fc-item'>Новости</div>
+                        <div className='fc-item'><NavLink className='fc-item-text' to='/'>Главная</NavLink></div>
+                        {/* <div className='fc-item'><NavLink className='fc-item-text' to='/buy'>Купить заправку</NavLink></div> */}
+                        <div className='fc-item'><NavLink className='fc-item-text' to='/login'>Логин</NavLink></div>
+                        <div className='fc-item'><NavLink className='fc-item-text' to='/map'>Карта заправок</NavLink></div>
+                        <div className='fc-item'><NavLink className='fc-item-text' to='/registration'>Регистрация</NavLink></div>
+                        <div className='fc-item'><NavLink className='fc-item-text' to='/sertificats'>Сертификаты</NavLink></div>
+                        <div className='fc-item'><NavLink className='fc-item-text' to='/contacts'>Контакты</NavLink></div>
+                        <div className='fc-item'><NavLink className='fc-item-text' to='/news'>Новости</NavLink></div>
                     </div>
                 </div>
                 <div className='footer-col'>

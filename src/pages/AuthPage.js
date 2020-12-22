@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react'
 import {useHttp} from '../hooks/http.hook'
 import {useMessage} from '../hooks/message.hook'
 import {AuthContext} from '../context/AuthContext'
+import {useLocation} from "react-router-dom"
 import jwt from 'jsonwebtoken'
 import M from 'materialize-css/dist/js/materialize.min.js'
 import './style/AuthPage.css'
@@ -17,15 +18,19 @@ export const AuthPage = () => {
   const [passwordShow, setPasswordShow] = useState(false)
   const [mes, setMes] = useState(null)
   let loc = JSON.parse(localStorage.getItem("path"))
-
+  const { pathname } = useLocation();
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const {session, setSession} = useContext(AuthContext)
   let emailtoken = jwt.sign({email: email, password: password }, 'chargepoint', {algorithm: 'HS512'})
 
-  console.log(auth)
+  useEffect(() => {
+    if (pathname === '/login'){
+        window.scrollTo(0, 0);
+    }
 
+}, [pathname]);
   useEffect(() => {
     message(mes)
     message(error)
@@ -70,11 +75,6 @@ export const AuthPage = () => {
     return re.test(email);
   }
 
-
-  // const passvalidate = (password) => {
-  //   let passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,99}$/
-  //   return passw.test(password)
-  // }
 
   const check = (email, password) => {
     

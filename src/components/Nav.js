@@ -72,7 +72,7 @@ function Nav() {
                     <div>
                         <NavLink to={`/user/${id}`}><span className='menu-item menu-item-p'>
                             <FontAwesomeIcon icon={faUser} size="lg"/>
-                            &nbsp; Кабинет пользователя {firstName}</span>
+                            &nbsp; Кабинет пользователя {firstName} </span>
                         </NavLink>
                         <span><FontAwesomeIcon className='logout'  onClick={logoutHandler} icon={faSignOutAlt} size='2x'/></span>
                     </div>:
@@ -80,7 +80,7 @@ function Nav() {
                             <FontAwesomeIcon icon={faUser} size="lg"/> &nbsp; Личный кабинет</div>
                      </NavLink>
                      }
-                    <div className='menu-item menu-item-p'>+ 375 19 859 65 89 </div>
+                    {/* <div className='menu-item menu-item-p'>+ 375 19 859 65 89 </div> */}
                     <div className='menu-item item-border'
                         onMouseEnter ={()=>console.log("over")}
                         onMouseLeave={()=>console.log('Leave')}

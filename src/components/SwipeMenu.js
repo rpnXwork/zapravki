@@ -5,7 +5,7 @@ import {AuthContext} from '../context/AuthContext'
 
 function SwipeMenu() {
 
-    const {token, id} = useContext(AuthContext)
+    const {token, role, id} = useContext(AuthContext)
 
     const [isChecked, setIsChecked] = useState(false);
     
@@ -21,11 +21,12 @@ function SwipeMenu() {
             <ul className="menu-box">
                 <ul className="menu-boxrr">
                     <li><NavLink to='/' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Главная</NavLink></li>
-                    {/* {token?
-                    <li><NavLink to={`/user/${id}`} className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>КАБИНЕТ</NavLink></li>:
-                    <li><NavLink to='/login' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>ЛОГИН</NavLink></li>} */}
-                    <li><Link to='/login' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Логин</Link></li>
+                    {token?
+                    <li><NavLink to={`/user/${id}`} className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Кабинет</NavLink></li>:
+                    <li><NavLink to='/login' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Логин</NavLink></li>}
                     <li><NavLink to='/map' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Карта заправок</NavLink></li>
+                    {role === 'admin'?
+                    <li style={{backgroundColor:'#dddada'}}><NavLink to='/users' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Пользователи</NavLink></li>:<></> }
                     <li><NavLink to='/' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Заработать</NavLink></li>
                     <li><NavLink to='/contacts' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Контакты</NavLink></li>
                     <li><NavLink to='/news' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Новочти</NavLink></li>
