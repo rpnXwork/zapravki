@@ -93,6 +93,30 @@ option {
     cursor: pointer;
 }
 
+.pass-fog-btn {
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 15px;
+    padding: 10px 10px;
+    display: inline-block;
+    color: #FFF;
+    position: relative;
+    display: inline-block;
+    line-height: 1;
+    -webkit-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+    vertical-align: middle;
+    text-align: center;
+    transition: all .4s ease;
+    text-transform: uppercase;
+    background-color: #41a350;
+    border-style: none;
+    border-radius: 0;
+    min-width: 130px;
+    margin: 0 10px;
+}
+
 /* .react-date-picker  {
     border: 2px solid black;
 } */
