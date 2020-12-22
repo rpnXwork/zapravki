@@ -1,10 +1,9 @@
-import React, {useState, useEffect, Children} from 'react';
-import {NavLink, useLocation ,useParams } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {NavLink} from 'react-router-dom';
 import {useMessage} from '../hooks/message.hook';
 import {useHttp} from '../hooks/http.hook'
 import jwt from 'jsonwebtoken'
 import {Timer} from '../components/Timer'
-import {Loaderr} from '../components/Loaderr';
 import {API, PORT} from '../api'
 import PhoneInput from 'react-phone-input-2'
 import './style/React-telinput.css'
@@ -59,7 +58,8 @@ export const RegistrationPage = () => {
             setForm({...form, gender: 'female' })
           }
          
-      }, [form, gender])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [gender])
 
       useEffect(() => {
         window.M.updateTextFields()

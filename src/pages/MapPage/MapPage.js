@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useContext, useRef}  from 'react';
 import {MapContainer, TileLayer} from "react-leaflet";
-import {useLocation, useParams} from "react-router-dom"
+import {useLocation} from "react-router-dom"
 import 'react-leaflet-markercluster/dist/styles.min.css';
-import MarkerClusterGroup from 'react-leaflet-markercluster';
+// import MarkerClusterGroup from 'react-leaflet-markercluster';
 import {AuthContext} from '../../context/AuthContext'
 
 import MapOptions from './MapOptions';
@@ -13,10 +13,9 @@ import {MarkerContext} from '../../context/MarkerContext'
 import {SOCKET} from '../../api';
 import Use from '../../components/Use';
 
-
 const MapPage = () => {
 
-    const {isAuthenticated, token, id, chargeid} = useContext(AuthContext)
+    const {isAuthenticated, id, chargeid} = useContext(AuthContext)
     const ws = useRef(null)
     const [state, setState] = useState()
     const [newdata, setNwedata] = useState()
@@ -24,10 +23,11 @@ const MapPage = () => {
     const [options, setOptions] = useState()
     const [conected, setConected] = useState(false)
     const [charging, setCharging] = useState(false)
+    const [chargingbtn, setChargingbtn] = useState(false)
+    const [resevdedbtn, setResevdedbtn] = useState(false)
     const [close, setClose] = useState(false)
     const [chargeData, setChargeData] = useState()
-
-    
+    const [use, setUse] = useState(true)
     const [markers, setMarkers] = useContext(MarkerContext)
 
     useEffect(() => {
@@ -58,15 +58,55 @@ const MapPage = () => {
         }
         if 
         (data.type === "charge"){
-            setCharging(true)
             setChargeData(data)
+            setChargingbtn(true)
+            if (!data.userAction.shouldBeFinished){
+               setCharging(true)
+            }
+            if (data.userAction.shouldBeFinished) {
+                if (!use) {
+                    setChargingbtn(false)
+                    setCharging(false)
+                    setUse(true)
+                } else {
+                    setChargingbtn(false)
+                }
+            }
+        }
+        if 
+        (data.type === "reserve"){
+            setChargeData(data)
+            setResevdedbtn(true)
+            if (!data.userAction.shouldBeFinished){
+               setCharging(true)
+            }
+            if (data.userAction.shouldBeFinished) {
+                if (!use) {
+                    setResevdedbtn(false)
+                    setCharging(false)
+                    setUse(true)
+                } else {
+                    setResevdedbtn(false)
+                }
+            }
         }
     }
 
         return () => {
             ws.current.close();
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    useEffect(() => {
+        if (chargeData) {
+             if (chargeData.userAction.shouldBeFinished && !use && charging){
+            setCharging(false)
+            setUse(true)
+            }
+        } 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [use])
 
     const { pathname } = useLocation();
 
@@ -86,8 +126,8 @@ const MapPage = () => {
 
     useEffect(()=>{
         if (state && newdata){
-            setState(state.map((key,i)=>{
-                newdata.map((newdataitem, i)=>{
+            setState(state.map((key)=>{
+                newdata.forEach(newdataitem =>{
                     if (key.id === newdataitem.id){
                         key = newdataitem
                     }
@@ -95,7 +135,7 @@ const MapPage = () => {
                 return key
             }))
         } 
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[newdata])
 
     useEffect(() => {
@@ -104,27 +144,29 @@ const MapPage = () => {
 
     useEffect(()=>{
         setMarkers(state)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[state])
 
 
     useEffect(()=>{
         if (!state)
         setState(markers)
-    },[state])
+    },[markers, state])
 
     useEffect(()=>{
-        if (ws && conected) {
+        if (state !== undefined && conected) {
             ws.current.send(JSON.stringify(options))
             console.log("New Options Sent", JSON.stringify(options))
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[options])
 
     useEffect(()=>{
         if (chargeid !== undefined) {
-            ws.current.send(JSON.stringify({id: chargeid}))
+            ws.current.send(JSON.stringify({id: id}))
             console.log('sent id')
         }
-    },[chargeid])
+    },[chargeid, id])
 
     const getChargingStatus = () =>{
         if (isAuthenticated) {
@@ -136,12 +178,22 @@ const MapPage = () => {
     const updateOptions = (e) => {
         setOptions(e)
     }
+    const updUse = (e) => {
+        setUse(!!e)
+    }
+
 
     return (
         <>
         {/* <Test props={state}/> */}
+        
         <div className='map-window'>
-            <MapOptions  updateData={updateOptions} />
+            <div>
+                {chargingbtn?<div className='charge-status' onClick={()=>{setUse(true)}}>Зарядка</div>:<div></div>}
+                {resevdedbtn?<div className='charge-status' style={{backgroundColor:"rgb(196, 22, 255)"}} onClick={()=>{setUse(true)}}>Резерв</div>:<div></div>}
+                <MapOptions  updateData={updateOptions} /></div>
+            
+            
             <div className='map-body'>
                 <MapContainer fullscreenControl={true} maxZoom={18} whenCreated={setMap} center={[53.90757424711361,27.554397583007812]} zoom={12} scrollWheelZoom={true} >
                     <TileLayer
@@ -153,13 +205,14 @@ const MapPage = () => {
                                        
                     </MarkerClusterGroup> */}
                     {state?state.map((key,i) =>
-                            <Markers props = {key} key = {i} />       
+                            <Markers props = {key} key = {i} charge={chargeData}/>       
                         ):<div></div>
                     }   
                 </MapContainer>
-                {isAuthenticated && charging? <Use  props= {chargeData}/>:<div></div>}
+                {isAuthenticated && use && charging? <Use  props= {chargeData} updUse={updUse}/>:<div></div>}
             </div>
         </div>
+        
         </>
     )
 }

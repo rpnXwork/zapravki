@@ -114,6 +114,13 @@
     margin: 10px;
     cursor: pointer;
 }
+.enemy-pc {
+  cursor: help;
+  display: flex;
+  justify-content: center;
+}
+
+
     
 .button-login:hover {
     background: #2e3030!important;

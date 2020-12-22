@@ -74,12 +74,24 @@ import { Link } from 'react-router-dom';
 import {AuthContext} from '../../context/AuthContext'
 
 
-const  Popups = ({props}) => {
+const  Popups = ({props, charge}) => {
     const [markers] = useContext(MarkerContext)
     const {isAuthenticated} = useContext(AuthContext)
 
+
     const [state, setState] = useState(props)
     const [work, setWork] = useState(false)
+    const [c, setC] = useState()
+
+    useEffect(() => {
+        if(charge !== undefined) {
+            setC(charge.type)
+            if (charge.userAction.shouldBeFinished) {
+                setC(undefined)
+            }
+        }
+        
+    }, [charge])
 
         useEffect(() => {
             setState(props)
@@ -87,27 +99,22 @@ const  Popups = ({props}) => {
 
         useEffect(() => {
             setWork(false)
-            // console.log('falsed 0',state.id)
             if (state.connectors.length  === 2 ){
                 if (state.connectors[0].status === 'work' || state.connectors[0].status === 'connected'){
                     setWork(true)
-                    // console.log('trued 1 ',state.id)
                 } else if (state.connectors[1].status === 'work' || state.connectors[1].status === 'connected') {
                     setWork(true)
-                    // console.log('trued 1-2 ',state.id)
                 } else {
                     setWork(false)
                 }
             } else if (state.connectors.length === 1 ){
                 if (state.connectors[0].status === 'work' || state.connectors[0].status === 'connected'){
                     setWork(true)
-                    // console.log('trued 2 ',state.id)
                 }       
             } else {
                 setWork(false)
-                // console.log('false 3',state.id)
             }    
-        }, [markers])
+        }, [markers, state.connectors])
 
     return (
         <>
@@ -208,21 +215,33 @@ const  Popups = ({props}) => {
                                 </div>
                             )
                         }
+                        return (  
+                            <div className='popup-connector' key={i} style={{padding: '10px'}}>
+                                    <div className='popup-connector-type'>{key.type}</div>
+                                    <div className='popup-connector-power'>{key.power}</div>
+                                    <div className='popup-connector-status' style={{border:'8px solid #41a350'}}>
+                                        <div className='popup-connector-status-status'>
+                                            {i + 1}
+                                        </div>
+                                    </div>              
+                                </div>
+                            )
                         
                     })}
                 </div>
                 
-                {(isAuthenticated && work)?
+                {(isAuthenticated && work && !c)?
                 <Link to={`map/station${state.id}`}> <button className='popup-btn'>Зарядиться</button></Link>:
                  (isAuthenticated && !work)?<div>Нет доступных станций</div>:
+                 (isAuthenticated && work && c === 'charge')?<div>уже идет зарядка</div>:
+                 (isAuthenticated && work && c === 'reserve')?<div>уже есть резерв</div>:
                 <Link to='/login'> <button className='popup-btn'>Войти</button></Link>}
             </Popup>   
         </>
     )
-    
 }
 
-const Markers = ({props}) => {
+const Markers = ({props,charge}) => {
 
     const [state, setState] = useState(props)
 
@@ -237,49 +256,49 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
         if (state.connectors[0].status === 'work'){
             return(
                 <Marker position={geo} icon = {Work}>
-                    <Popups props = {props}/>  
+                    <Popups props = {state} charge={charge}/>  
                 </Marker>
             )
         }
         if (state.connectors[0].status === 'service'){
             return(
                 <Marker position={geo} icon = {Service}>
-                    <Popups props = {props}/>  
+                    <Popups props = {state} charge={charge}/>  
                 </Marker>  
             )
         }
         if (state.connectors[0].status === 'busy'){
             return(
                 <Marker position={geo} icon = {Busy}>
-                    <Popups props = {props}/>  
+                    <Popups props = {state} charge={charge}/>  
                 </Marker>
             )
         }
         if (state.connectors[0].status === 'alert'){
             return(
                 <Marker position={geo} icon = {Alert}>
-                    <Popups props = {props}/>  
+                    <Popups props = {state} charge={charge}/>  
                 </Marker>
             )
         }
         if (state.connectors[0].status === 'connected'){
             return(
                 <Marker position={geo} icon = {Connected}>
-                    <Popups props = {props}/>  
+                    <Popups props = {state} charge={charge}/>  
                 </Marker>  
             )
         }
         if (state.connectors[0].status === 'build'){
             return(
                 <Marker position={geo} icon = {Build}>
-                    <Popups props = {props}/>  
+                    <Popups props = {state} charge={charge}/>  
                 </Marker>
             )
         }
         if (state.connectors[0].status === 'reserved'){
             return(
                 <Marker position={geo} icon = {Reserved}>
-                    <Popups props = {props}/>  
+                    <Popups props = {state} charge={charge}/>  
                 </Marker>
             )
         }
@@ -290,44 +309,44 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
     if (state.connectors[0].status === 'work' && state.connectors[1].status === 'work'){
         return(
             <Marker position={geo} icon = {WorkWork}>
-                <Popups props = {props}/>  
+                <Popups props = {state} charge={charge}/>  
             </Marker>
         )}
     if (state.connectors[0].status === 'work' && state.connectors[1].status === 'service'){
         return(
             <Marker position={geo} icon = {WorkService}>
-                <Popups props = {props}/>          
+                <Popups props = {state} charge={charge}/>          
             </Marker>
         )}
 
     if (state.connectors[0].status === 'work' && state.connectors[1].status === 'build'){
         return(
                 <Marker position={geo} icon = {WorkBuild}>
-                 <Popups props = {props}/>                  
+                 <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'work' && state.connectors[1].status === 'busy'){
         return(
                 <Marker position={geo} icon = {WorkBusy}>
-                 <Popups props = {props}/>                  
+                 <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'work' && state.connectors[1].status === 'connected'){
         return(
                 <Marker position={geo} icon = {WorkConnected}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'work' && state.connectors[1].status === 'reserved'){
         return(
                 <Marker position={geo} icon = {WorkReserved}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'work' && state.connectors[1].status === 'alert'){
         return(
                 <Marker position={geo} icon = {WorkAlert}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
@@ -336,43 +355,43 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
     if (state.connectors[0].status === 'build' && state.connectors[1].status === 'build'){
         return(
                 <Marker position={geo} icon = {BuildBuild}>
-                 <Popups props = {props}/>                  
+                 <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'build' && state.connectors[1].status === 'service'){
         return(
                 <Marker position={geo} icon = {BuildService}>
-                 <Popups props = {props}/>                  
+                 <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'build' && state.connectors[1].status === 'work'){
         return(
                 <Marker position={geo} icon = {BuildWork}>
-                 <Popups props = {props}/>                  
+                 <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'build' && state.connectors[1].status === 'busy'){
         return(
                 <Marker position={geo} icon = {BuildBusy}>
-                 <Popups props = {props}/>                  
+                 <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'build' && state.connectors[1].status === 'connected'){
         return(
                 <Marker position={geo} icon = {BuildConnected}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'build' && state.connectors[1].status === 'alert'){
         return(
                 <Marker position={geo} icon = {BuildAlert}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'build' && state.connectors[1].status === 'reserved'){
         return(
                 <Marker position={geo} icon = {BuildReserved}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
@@ -381,14 +400,14 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
     if (state.connectors[0].status === 'busy' && state.connectors[1].status === 'busy'){
         return(
                 <Marker position={geo} icon = {BusyBusy}>
-                 <Popups props = {props}/>                  
+                 <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
     if (state.connectors[0].status === 'busy' && state.connectors[1].status === 'work'){
         return(
                 <Marker position={geo} icon = {BusyWork}>
-                 <Popups props = {props}/>                  
+                 <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
@@ -396,7 +415,7 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
     if (state.connectors[0].status === 'busy' && state.connectors[1].status === 'service'){
         return(
                 <Marker position={geo} icon = {BusyService}>
-                 <Popups props = {props}/>                  
+                 <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
@@ -404,13 +423,13 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
     if (state.connectors[0].status === 'busy' && state.connectors[1].status === 'build'){
         return(
                 <Marker position={geo} icon = {BusyBuild}>
-                 <Popups props = {props}/>                  
+                 <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'busy' && state.connectors[1].status === 'alert'){
         return(
                 <Marker position={geo} icon = {BusyAlert}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
@@ -418,7 +437,7 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
     if (state.connectors[0].status === 'busy' && state.connectors[1].status === 'connected'){
         return(
                 <Marker position={geo} icon = {BusyConnected}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
@@ -426,7 +445,7 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
     if (state.connectors[0].status === 'busy' && state.connectors[1].status === 'reserved'){
         return(
                 <Marker position={geo} icon = {BusyReserved}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
@@ -434,49 +453,49 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
     if (state.connectors[0].status === 'service' && state.connectors[1].status === 'work'){
         return(
                 <Marker position={geo} icon = {ServiceWork}>
-                 <Popups props = {props}/>                  
+                 <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
     if (state.connectors[0].status === 'service' && state.connectors[1].status === 'service'){
         return(
                 <Marker position={geo} icon = {ServiceService}>
-                 <Popups props = {props}/>                  
+                 <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
     if (state.connectors[0].status === 'service' && state.connectors[1].status === 'busy'){
         return(
                 <Marker position={geo} icon = {ServiceBusy}>
-                 <Popups props = {props}/>                  
+                 <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
     if (state.connectors[0].status === 'service' && state.connectors[1].status === 'build'){
         return(
                 <Marker position={geo} icon = {ServiceBuild}>
-                 <Popups props = {props}/>                  
+                 <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
     if (state.connectors[0].status === 'service' && state.connectors[1].status === 'alert'){
         return(
                 <Marker position={geo} icon = {ServiceAlert}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
     if (state.connectors[0].status === 'service' && state.connectors[1].status === 'connected'){
         return(
                 <Marker position={geo} icon = {ServiceConnected}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
     if (state.connectors[0].status === 'service' && state.connectors[1].status === 'reserved'){
         return(
                 <Marker position={geo} icon = {ServiceReserved}>
-                    <Popups props = {props}/>       
+                    <Popups props = {state} charge={charge}/>       
                 </Marker>
         )}    
         
@@ -485,43 +504,43 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
     if (state.connectors[0].status === 'connected' && state.connectors[1].status === 'build'){
         return(
                 <Marker position={geo} icon = {ConnectedBuild}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'connected' && state.connectors[1].status === 'service'){
         return(
                 <Marker position={geo} icon = {ConnectedService}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'connected' && state.connectors[1].status === 'work'){
         return(
                 <Marker position={geo} icon = {ConnectedWork}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'connected' && state.connectors[1].status === 'busy'){
         return(
                 <Marker position={geo} icon = {ConnectedBusy}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'connected' && state.connectors[1].status === 'connected'){
         return(
                 <Marker position={geo} icon = {ConnectedConnected}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'connected' && state.connectors[1].status === 'alert'){
         return(
                 <Marker position={geo} icon = {ConnectedAlert}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'connected' && state.connectors[1].status === 'reserved'){
         return(
                 <Marker position={geo} icon = {ConnectedReserved}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
@@ -529,43 +548,43 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
     if (state.connectors[0].status === 'reserved' && state.connectors[1].status === 'build'){
         return(
                 <Marker position={geo} icon = {ReservedBuild}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'reserved' && state.connectors[1].status === 'service'){
         return(
                 <Marker position={geo} icon = {ReservedService}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'reserved' && state.connectors[1].status === 'work'){
         return(
                 <Marker position={geo} icon = {ReservedWork}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'reserved' && state.connectors[1].status === 'busy'){
         return(
                 <Marker position={geo} icon = {ReservedBusy}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'reserved' && state.connectors[1].status === 'connected'){
         return(
                 <Marker position={geo} icon = {ReservedConnected}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'reserved' && state.connectors[1].status === 'alert'){
         return(
                 <Marker position={geo} icon = {ReservedAlert}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'reserved' && state.connectors[1].status === 'reserved'){
         return(
                 <Marker position={geo} icon = {ReservedReserved}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
 
@@ -573,66 +592,49 @@ const geo = [state.geometry.coordinates[1],state.geometry.coordinates[0]]
     if (state.connectors[0].status === 'alert' && state.connectors[1].status === 'build'){
         return(
                 <Marker position={geo} icon = {AlertBuild}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'alert' && state.connectors[1].status === 'service'){
         return(
                 <Marker position={geo} icon = {AlertService}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'alert' && state.connectors[1].status === 'work'){
         return(
                 <Marker position={geo} icon = {AlertWork}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'alert' && state.connectors[1].status === 'busy'){
         return(
                 <Marker position={geo} icon = {AlertBusy}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'alert' && state.connectors[1].status === 'connected'){
         return(
                 <Marker position={geo} icon = {AlertConnected}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'alert' && state.connectors[1].status === 'alert'){
         return(
                 <Marker position={geo} icon = {AlertAlert}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
     if (state.connectors[0].status === 'alert' && state.connectors[1].status === 'reserved'){
         return(
                 <Marker position={geo} icon = {AlertReserved}>
-                    <Popups props = {props}/>                  
+                    <Popups props = {state} charge={charge}/>                  
             </Marker>
         )}
         
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     return(
         <Marker position={geo}>
-            <Popups props = {props}/>               
+            <Popups props = {state} charge={charge}/>               
         </Marker>
         )
         
