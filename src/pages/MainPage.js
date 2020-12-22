@@ -12,14 +12,13 @@ function MainPage() {
     const { pathname } = useLocation();
 
     useEffect(() => {
-        localStorage.removeItem("mappage")
+        localStorage.setItem("path", JSON.stringify("/"))
     }, [])
 
     useEffect(() => {
         if (pathname === '/'){
             window.scrollTo(0, 0);
         }
-
     }, [pathname]);
 
     return (

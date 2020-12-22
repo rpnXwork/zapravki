@@ -21,8 +21,10 @@ export const AuthPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
-
+  const {session, setSession} = useContext(AuthContext)
   let emailtoken = jwt.sign({email: email, password: password }, 'chargepoint', {algorithm: 'HS512'})
+
+  console.log(auth)
 
   useEffect(() => {
     message(mes)
@@ -51,6 +53,10 @@ export const AuthPage = () => {
   }
   const passwordHandler = event => {
     setPassword(event.target.value)
+  }
+
+  const Session = (e) => {
+    setSession(e.target.checked)
   }
 
   const  validate = (email) => {
@@ -109,8 +115,7 @@ export const AuthPage = () => {
         if(check(email, password)){
           try {
             const data = await request(`${API}${PORT}/authbyphone`, 'POST', {token: jwt.sign({phoneNumber: phoneNumber.replace('+',''), password: password}, 'chargepoint', {algorithm: 'HS512'})})
-            auth.login(data)
-            console.log(data)
+            auth.login(data, session)
             }  catch (e) {
             }
         }
@@ -133,7 +138,7 @@ export const AuthPage = () => {
             <div className="wrap-login">
                 <div className="login-form" >
                     <div className="login-form-title">
-                    <NavLink  to={loc}><i className='login-form-tittle-btn large material-icons'>arrow_back</i></NavLink>&nbsp;&nbsp;Войти в Личный кабинет
+                    <NavLink to={loc?`${loc}`:'/'}><i className='login-form-tittle-btn large material-icons'>arrow_back</i></NavLink>&nbsp;&nbsp;Войти в Личный кабинет
                     </div>
                 <div className="wrap-input" data-validate="Email is required">
                     <input
@@ -147,7 +152,7 @@ export const AuthPage = () => {
                         required
                     />
                     <div className="login-text-butn" >
-                  Забыли пароль??
+                  Забыли пароль?
                   <NavLink className="registration-text" to='/passforgot'> Востановить </NavLink> 
                 </div>
                     <span className="focus-input"></span>
@@ -168,6 +173,13 @@ export const AuthPage = () => {
                         required
                     />
                     <span className="focus-input"></span>
+                    <div className='enemy-pc' title="Данные пользоватебя удаляться после закрытия страницы или зактыия браузера">Чужой устройство
+                    <input
+                    style={{cursor:'pointer'}}
+                    type='checkbox'
+                    checked={session}
+                    name="typefast"
+                    onChange={Session}></input></div>
                 </div>
                 <div className="btns">
                     <button

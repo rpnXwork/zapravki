@@ -2,41 +2,25 @@ import React, {useContext, useState,useEffect} from 'react'
 import {Redirect, useParams} from "react-router-dom"
 import './Connectors.css'
 import M from 'materialize-css/dist/js/materialize.min.js'
-
-import Type1service from './images/Type1service.png'
-import Type1busy from './images/Type1busy.png'
-import Type1work from './images/Type1work.png'
-import Type1alert from './images/Type1alert.png'
-import Type1build from './images/Type1build.png'
-import Type1reserved from './images/Type1reserved.png'
-import Type1connected from './images/Type1connected.png'
-
-import Type2service from './images/Type2service.png'
-import Type2busy from './images/Type2busy.png'
-import Type2work from './images/Type2work.png'
-import Type2alert from './images/Type2alert.png'
-import Type2build from './images/Type2build.png'
-import Type2reserved from './images/Type2reserved.png'
-import Type2connected from './images/Type2connected.png'
-
+import {Image} from './ConnectorsImage'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 
 import {NavLink} from 'react-router-dom'
-import {MarkerContext} from '../context/MarkerContext'
-import {AuthContext} from '../context/AuthContext'
-import {Loaderr} from './Loaderr'
-import {useHttp} from '../hooks/http.hook'
-import {useMessage} from '../hooks/message.hook'
-import {API, PORT} from '../api'
+import {MarkerContext} from '../../context/MarkerContext'
+import {AuthContext} from '../../context/AuthContext'
+import {Loaderr} from '../../components/Loaderr'
+import {useHttp} from '../../hooks/http.hook'
+import {useMessage} from '../../hooks/message.hook'
+import {API, PORT} from '../../api'
 
-import CounterInput from "./CounterInput"
+import CounterInput from "../../components/CounterInput"
 
 const Connectors = () => {
 
     const {conectorId} = useParams()
     const [markers] = useContext(MarkerContext)
-    const {isAuthenticated, token , id, setChargeid}  = useContext(AuthContext)
+    const {id, setChargeid}  = useContext(AuthContext)
     const {request, error, clearError} = useHttp()
     const message = useMessage()
     const [mes, setMes] = useState(null)
@@ -51,6 +35,7 @@ const Connectors = () => {
     const [reserved, setReserved] = useState([])   
     const [connected, setConnected] = useState([])
     const [status, setStatus] = useState(false)
+    const [plug, setPlug] = useState(false)
 
     const [charge, setCharge] = useState(false)
     const [reserv, setReserv] = useState(false)
@@ -60,9 +45,7 @@ const Connectors = () => {
         1: false
     })
     const [port, setPort] = useState(0)
-
     const [countCharge, setCountCharge] = useState(0)
-    const [countReserv, setCountReserv] = useState(0)
     const [hour, setHour] = useState(false)
     const [hourmess, setHourmess] = useState(false)
     const [unlim, setUnlim] = useState(false)
@@ -81,10 +64,8 @@ const Connectors = () => {
             setUnlim(false)
             setUnlimmess(false)
         }
-        console.log('wfewf')
         
-    }, [work,
-        connected,])
+    }, [work, connected])
 
     useEffect(() => {
         message(mes)
@@ -106,7 +87,6 @@ const Connectors = () => {
             setCharge(false)
             setReserv(false)
             setCountCharge(0)
-            // setCountReserv(0)
         }
     }, [work])
 
@@ -120,7 +100,7 @@ const Connectors = () => {
 
     const arraycreator = (data) => {
      
-        data.map((key,i) => {
+        data.forEach(key => {
             if(key.status === "work") {
                 workarr.push(key)
                 }
@@ -152,8 +132,8 @@ const Connectors = () => {
             })
     }
 
-    const gg = (data) => {
-        data.map((key)=>{
+    const getMarkerFromContext = (data) => {
+        data.forEach(key=>{
             if (String(key.id) === conectorId){
                 setState(key)
             }
@@ -162,14 +142,16 @@ const Connectors = () => {
 
     useEffect(() => {
         if (markers && markers !== null) {
-            gg(markers)
+            getMarkerFromContext(markers)
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [markers])
 
     useEffect(() => {
         if (state !== null){
             arraycreator(state.connectors)
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state])
 
     const changeHandler = event => {
@@ -179,6 +161,7 @@ const Connectors = () => {
                 2: false
             })
             setPort(1)
+            setPlug(false)
         } else if (event.target.name === "1" && checked[1] === true) {
                 setChecked({
                 1: false,
@@ -187,6 +170,7 @@ const Connectors = () => {
             setHour(false)
             setReserv(false)
             setCharge(false)
+            setPlug(false)
             setCountCharge(0)
             // setCountReserv(0)
         } else if  (event.target.name === "2" && checked[2] === true) {
@@ -196,6 +180,7 @@ const Connectors = () => {
             })
             setHour(false)
             setReserv(false)
+            setPlug(false)
             setCharge(false)
             setCountCharge(0)
             // setCountReserv(0)
@@ -205,12 +190,13 @@ const Connectors = () => {
                 2: true   
             })
             setPort(2)
+            setPlug(false)
         }
     }
 
-    const startcharge = async () => {
+    const startcharge = async (e, count = 1) => {
         try{
-            const data = await request(`${API}${PORT}/chargepoint/${conectorId}/start/${action}/${port}/${id}?energy=${countCharge}`, 'POST','')
+            const data = await request(`${API}${PORT}/chargepoint/${conectorId}/start/${action}/${port}/${id}?${e}=${countCharge * count}`, 'POST','')
             setChargeid(conectorId,id)
             setChecked({
                 1: false,
@@ -218,6 +204,9 @@ const Connectors = () => {
             })
             setReserv(false)
             setCharge(false)
+            if (data.status === 'plug'){
+                setPlug(true)
+            }
             setMes(data.message)
             if (data.status === 'ok') {
                 setStatus(true)
@@ -225,7 +214,6 @@ const Connectors = () => {
         } catch(e){
         }    
     }
-
 
     const Connector = ({props , status, num}) => {
 
@@ -260,93 +248,6 @@ const Connectors = () => {
             
         )
     }
-
-    const Image = ({type , status}) => {
-
-        if (type === "AC1/J1772" && status === 'work'){
-            return(    
-            <img className='connector-img' src={Type1work} alt='conectortype'/>         
-            )
-        }
-        if (type === "AC1/J1772" && status === 'busy'){
-            return(    
-            <img className='connector-img' src={Type1busy} alt='conectortype'/>         
-            )
-        }
-        
-        if (type === "AC1/J1772" && status === 'service'){
-            return(    
-            <img className='connector-img' src={Type1service} alt='conectortype'/>         
-            )
-        }
-        
-        if (type === "AC1/J1772" && status === 'alert'){
-            return(    
-            <img className='connector-img' src={Type1alert} alt='conectortype'/>         
-            )
-        }
-        
-        if (type === "AC1/J1772" && status === 'build'){
-            return(    
-            <img className='connector-img' src={Type1build} alt='conectortype'/>         
-            )
-        }
-        
-        if (type === "AC1/J1772" && status === 'reserved'){
-            return(    
-            <img className='connector-img' src={Type1reserved} alt='conectortype'/>         
-            )
-        }
-        
-        if (type === "AC1/J1772" && status === 'connected'){
-            return(    
-            <img className='connector-img' src={Type1connected} alt='conectortype'/>         
-            )
-        }
-        
-        if (type === "AC3/Type2" && status === 'work'){
-            return(    
-            <img className='connector-img' src={Type2work} alt='conectortype'/>         
-            )
-        }
-        
-        if (type === "AC3/Type2" && status === 'busy'){
-            return(    
-            <img className='connector-img' src={Type2busy} alt='conectortype'/>         
-            )
-        }
-        
-        if (type === "AC3/Type2" && status === 'build'){
-            return(    
-            <img className='connector-img' src={Type2build} alt='conectortype'/>         
-            )
-        }
-        
-        if (type === "AC3/Type2" && status === 'service'){
-            return(    
-            <img className='connector-img' src={Type2service} alt='conectortype'/>         
-            )
-        }
-        
-        if (type === "AC3/Type2" && status === 'reserved'){
-            return(    
-            <img className='connector-img' src={Type2reserved} alt='conectortype'/>         
-            )
-        }
-        
-        if (type === "AC3/Type2" && status === 'connected'){
-            return(    
-            <img className='connector-img' src={Type2connected} alt='conectortype'/>         
-            )
-        }
-        
-        if (type === "AC3/Type2" && status === 'alert'){
-            return(    
-            <img className='connector-img' src={Type2alert} alt='conectortype'/>         
-            )
-        }
-        return(<img className='connector-img' src={Type2work} alt='conectortype'/> )       
-    }          
 
     if (markers === null) {
         return ( <Redirect to='/map'/>)
@@ -421,6 +322,7 @@ const Connectors = () => {
                         :<div>load</div>}
 
                     </div>
+                    {plug?<div onClick={()=>{setPlug(false)}} className='station-plug'><div className='plug-text'>Вставте конектор, когда состояние разьема изменится (желтый) начните зарядку.</div></div>:<div></div>}
                     {checked[1] && state.connectors[0].status === 'work'?
                     <div className='station-body-buttons'>
                         <button className='station-body-button' style={charge?{backgroundColor: '#41a350'}:{backgroundColor: '#A3A6AB'}} onClick={()=>{
@@ -488,7 +390,7 @@ const Connectors = () => {
                         <div className='reserv-tittle'>Итого:</div>
                         {state.connectors[port-1]?<div className='reserv-count'>{countCharge * Math.round(state.connectors[port-1].tariffs.reserve*100)/100}</div>:<div></div>}
                         <div className='reserv-UAH'>UAH</div>
-                        <button className='station-body-button reserv-btn' onClick={()=>{startcharge()}} style={{backgroundColor: '#C416FF'}}>Зарезервировать</button>
+                        <button className='station-body-button reserv-btn' onClick={()=>{startcharge("totalSeconds", 60)}} style={{backgroundColor: '#C416FF'}}>Зарезервировать</button>
                     </div>:
                     charge?
                     <div className='connector-charge-btn'>
@@ -553,8 +455,7 @@ const Connectors = () => {
                             <div className='reserv-count'>{countCharge * Math.round(state.connectors[port-1].tariffs.charge*100)/100}</div>:
                             <div className='reserv-count'>{100 * Math.round(state.connectors[port-1].tariffs.charge*100)/100}</div>}
                             <div className='reserv-UAH'>UAH</div>
-                            <button className='station-body-button reserv-btn' onClick={()=>{startcharge()}} style={{backgroundColor: '#41a350'}}>Зарядить</button>
-                            {connected.length?<div>weifhwefuwegbf</div>:<div></div>}
+                            <button className='station-body-button reserv-btn' onClick={()=>{startcharge('energy')}} style={{backgroundColor: '#41a350'}}>Зарядить</button>
                     </div>:
                     <div></div>
                     }

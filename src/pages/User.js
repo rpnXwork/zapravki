@@ -48,6 +48,7 @@ export default function User() {
         getmoney()
     }, [])
 
+
     return (
         <div className='afterregblock'>
            <div className='user-body'>

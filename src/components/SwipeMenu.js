@@ -1,11 +1,11 @@
-import { useEffect, useState, useContext } from 'react';
-import {NavLink} from 'react-router-dom'
+import React, {useState, useContext } from 'react';
+import {NavLink, Link} from 'react-router-dom'
 import './SwipeMenu.css';
 import {AuthContext} from '../context/AuthContext'
 
 function SwipeMenu() {
 
-    const {token, userId, nickname} = useContext(AuthContext)
+    const {token, id} = useContext(AuthContext)
 
     const [isChecked, setIsChecked] = useState(false);
     
@@ -20,19 +20,15 @@ function SwipeMenu() {
 
             <ul className="menu-box">
                 <ul className="menu-boxrr">
-                    <li><NavLink to='/' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>ГЛАВНАЯ</NavLink></li>
-                    {token?
-                    <li><NavLink to={`/user/${userId}`} className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>КАБИНЕТ</NavLink></li>:
-                    <li><NavLink to='/login' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>КАБИНЕТ</NavLink></li>}
-
+                    <li><NavLink to='/' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Главная</NavLink></li>
+                    {/* {token?
+                    <li><NavLink to={`/user/${id}`} className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>КАБИНЕТ</NavLink></li>:
+                    <li><NavLink to='/login' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>ЛОГИН</NavLink></li>} */}
+                    <li><Link to='/login' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Логин</Link></li>
                     <li><NavLink to='/map' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Карта заправок</NavLink></li>
-                    {/* <li><a className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Купить</a></li>
-                    <li><a className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Подключиться к системе</a></li>
-                    <li><a className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>КАЛЬКУЛЯТОР</a></li>
-                    <li><a className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>МОБИЛЬНОЕ ПРИЛОЖЕНИЕ</a></li> */}
-                    <li><NavLink to='/' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>ЗАРАБОТАТЬ</NavLink></li>
-                    <li><NavLink to='/contacts' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>КОНТАКТЫ</NavLink></li>
-                    <li><NavLink to='/news' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>НОВОСТИ</NavLink></li>
+                    <li><NavLink to='/' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Заработать</NavLink></li>
+                    <li><NavLink to='/contacts' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Контакты</NavLink></li>
+                    <li><NavLink to='/news' className="h-menu-item" onClick={() => setIsChecked(!isChecked)}>Новочти</NavLink></li>
                 </ul>
             </ul>
         </div>

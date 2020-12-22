@@ -12,11 +12,8 @@ import {faUser} from '@fortawesome/free-solid-svg-icons'
 import {faSignOutAlt} from '@fortawesome/free-solid-svg-icons'
 import {AuthContext} from '../context/AuthContext'
 
-
 function Nav() {
-
-    let loc = JSON.parse(localStorage.getItem("path"))
-
+    
     let location = useLocation()
     const auth = useContext(AuthContext)
     let gg = location.pathname
@@ -35,11 +32,10 @@ function Nav() {
         localStorage.setItem("path", JSON.stringify("/user"))
     }
 
-    
     const logoutHandler = event => {
         event.preventDefault()
         auth.logout()
-        history.push(loc)}
+        history.push('/')}
 
 
     useEffect(() => {
@@ -80,7 +76,7 @@ function Nav() {
                         </NavLink>
                         <span><FontAwesomeIcon className='logout'  onClick={logoutHandler} icon={faSignOutAlt} size='2x'/></span>
                     </div>:
-                        <NavLink to='/login' onClick={setPath}><div className='menu-item menu-item-p'>
+                        <NavLink to="/login" onClick={setPath}><div className='menu-item menu-item-p'>
                             <FontAwesomeIcon icon={faUser} size="lg"/> &nbsp; Личный кабинет</div>
                      </NavLink>
                      }

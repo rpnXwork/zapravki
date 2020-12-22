@@ -13,7 +13,8 @@ function App() {
 
   const [markers, setMarkers] = useState()
   const [chargeid, setChargeid] = useState()
-  const {id, token, emailConfirmed, phoneNumber, email, firstName, lastName, gender, birthdate, login, logout, ready} = useAuth()
+  const [session, setSession] = useState(false)
+  const {id, token, emailConfirmed, phoneNumber, email, firstName, lastName, gender, birthdate, login, logout, ready} = useAuth(session)
   const isAuthenticated = !!token
   const routes = useRoutes({isAuthenticated,id})
 
@@ -26,7 +27,8 @@ function App() {
 
   return (
     <MarkerContext.Provider value = {[markers, setMarkers]} >
-      <AuthContext.Provider value={{id, token, emailConfirmed, phoneNumber, email, firstName, lastName, gender, birthdate, login, logout, isAuthenticated, setChargeid ,chargeid
+      <AuthContext.Provider value={{id, token, emailConfirmed, phoneNumber, email, firstName, lastName, gender, birthdate, login, logout, isAuthenticated, setChargeid ,chargeid,
+      setSession
       }}>
 
         <Router>

@@ -16,12 +16,12 @@ const MapOptions = ({updateData}) => {
         statusempty: false,   
         typefast: true,
         typeslow: true,
-        portCCS: true,
-        portType2: true,
-        portCHAdeMO: true,
-        portJ1772: true,
-        portGB: true,
-        portSocket220V: true,
+        // portCCS: true,
+        Type2: true,
+        // portCHAdeMO: true,
+        J1772: true,
+        // portGB: true,
+        // portSocket220V: true,
     })
 
     const HandleChange = (e) => {
@@ -69,15 +69,15 @@ const MapOptions = ({updateData}) => {
                 </div>
                 <div className='mo-block'>
                     <div className='mo-block-header'>
-                        ПОрт
+                        Порт
                     </div>
                     <div className='mo-block-body'>
-                        <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.portCCS} name="portCCS" onChange={HandleChange}  type="checkbox"></input></span>CCS</div>
-                        <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.portType2} name="portType2" onChange={HandleChange}  type="checkbox"></input></span>Type2</div>
-                        <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.portCHAdeMO} name="portCHAdeMO" onChange={HandleChange}  type="checkbox"></input></span>CHAdeMO</div>
-                        <div className='mo-block-body-text'><span><input className='mo-block-inbut'checked={options.portJ1772} name="portJ1772" onChange={HandleChange}  type="checkbox"></input></span>J1772</div>
-                        <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.portGB} name="portGB" onChange={HandleChange}  type="checkbox"></input></span>GB/T</div>
-                        <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.portSocket220V} name="portSocket220V" onChange={HandleChange}  type="checkbox"></input></span>Socket 220V</div>
+                        {/* <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.portCCS} name="portCCS" onChange={HandleChange}  type="checkbox"></input></span>CCS</div> */}
+                        <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.Type2} name="Type2" onChange={HandleChange}  type="checkbox"></input></span>Type2</div>
+                        {/* <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.portCHAdeMO} name="portCHAdeMO" onChange={HandleChange}  type="checkbox"></input></span>CHAdeMO</div> */}
+                        <div className='mo-block-body-text'><span><input className='mo-block-inbut'checked={options.J1772} name="J1772" onChange={HandleChange}  type="checkbox"></input></span>J1772</div>
+                        {/* <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.portGB} name="portGB" onChange={HandleChange}  type="checkbox"></input></span>GB/T</div> */}
+                        {/* <div className='mo-block-body-text'><span><input className='mo-block-inbut' checked={options.portSocket220V} name="portSocket220V" onChange={HandleChange}  type="checkbox"></input></span>Socket 220V</div> */}
   
                     </div>
                 </div>

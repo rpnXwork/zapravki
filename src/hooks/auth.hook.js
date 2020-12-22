@@ -2,7 +2,8 @@ import {useState, useCallback, useEffect} from 'react'
 
 const storageName = 'userData'
 
-export const useAuth = () => {
+export const useAuth = (session) => {
+
   const [id, setId] = useState(null)
   const [token, setToken] = useState(null)
   const [emailConfirmed, setEmailConfirmed] = useState(null)
@@ -13,9 +14,14 @@ export const useAuth = () => {
   const [gender, setGender] = useState(null)
   const [birthdate, setBirthdate] = useState(null)
   const [ready, setReady] = useState(false)
+  const [ss, setSs] = useState(session)
+  
+  useEffect(() => {
+    setSs(session)
+  },[session])
 
-
-  const login = useCallback((data) => {
+  const login = useCallback((data,status = ss) => {
+    console.log(status)
     setId(data.id)
     setPhoneNumber(data.phoneNumber)
     setEmail(data.email)
@@ -25,8 +31,9 @@ export const useAuth = () => {
     setBirthdate(data.birthdate)
     setToken(data.token)
     setEmailConfirmed(data.emailConfirmed)
-    
-    localStorage.setItem(storageName, JSON.stringify({
+
+    if (status) {
+      sessionStorage.setItem(storageName, JSON.stringify({
       phoneNumber: data.phoneNumber,
       email: data.email, 
       firstName: data.firstName,
@@ -36,9 +43,21 @@ export const useAuth = () => {
       id: data.id,
       token: data.token,
       emailConfirmed: data.emailConfirmed
-    }))
-  }, [])
-
+      }))
+    } else {
+      localStorage.setItem(storageName, JSON.stringify({
+      phoneNumber: data.phoneNumber,
+      email: data.email, 
+      firstName: data.firstName,
+      lastName: data.lastName,
+      gender: data.gender,
+      birthdate: data.birthdate,
+      id: data.id,
+      token: data.token,
+      emailConfirmed: data.emailConfirmed
+      }))
+    }
+  }, [ss])
 
   const logout = useCallback(() => {
     setPhoneNumber(null)
@@ -52,12 +71,18 @@ export const useAuth = () => {
     setId(null)
     
     localStorage.removeItem(storageName)
+    sessionStorage.removeItem(storageName)
   }, [])
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem(storageName))
+    const timedata = JSON.parse(sessionStorage.getItem(storageName))
     if (data && data.token) {
       login(data)
+    }
+    if(timedata && timedata.token) {
+      setSs(true)
+      login(timedata, true)
     }
     setReady(true)
   }, [login])

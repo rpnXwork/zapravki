@@ -1,6 +1,6 @@
 import React from 'react'
 import {Switch, Route, Redirect} from 'react-router-dom'
-import Connectors from './components/Connectors';
+import Connectors from './pages/Connectors/Connectors';
 import {AuthPage} from './pages/AuthPage'
 import MainPage from './pages/MainPage';
 import MapPage from './pages/MapPage/MapPage';
@@ -47,10 +47,6 @@ export const useRoutes = ({isAuthenticated,id}) => {
       </Route>
         <Route path="/map" exact>
           <MapPage />
-        </Route>
-        <Route path="/map/station:id" exact>
-          <MapPage />
-          <Connectors />
         </Route>
         <Route path="/login" exact>
           <AuthPage />

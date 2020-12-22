@@ -9,6 +9,14 @@
     padding-bottom: 25px;
 }
 
+.use-close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border: unset;
+    background: unset;
+}
+
 .charge-img {
     height: 75px;
 }
@@ -63,11 +71,19 @@
 .use-btn-block {
     display: flex;
     flex-direction: column;
-    padding-bottom: 25px;
+    padding-bottom: 15px;
 }
 
 .use-btn-text {
     font-size: 24px;
     font-weight: 600;
     margin: 0 0 10px;
+}
+
+.use-info {
+    width: 100%;
+}
+
+.station-info {
+    justify-items: center;
 }
