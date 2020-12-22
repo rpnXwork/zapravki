@@ -90,6 +90,19 @@ const Connectors = () => {
         }
     }, [work])
 
+    useEffect(() => {
+        if (connected && connected === 0){
+            setChecked({
+                0: false,
+                1: false
+            })
+            setHour(false)
+            setCharge(false)
+            setReserv(false)
+            setCountCharge(0)
+        }
+    }, [connected])
+
     let workarr = []
     let busyarr = []
     let alertarr = []
@@ -150,6 +163,7 @@ const Connectors = () => {
     useEffect(() => {
         if (state !== null){
             arraycreator(state.connectors)
+            setPlug(false)
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state])
