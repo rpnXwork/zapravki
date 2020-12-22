@@ -76,12 +76,12 @@ export const Changepassword = () => {
                  className="input-area"
                  type="text"
                  name="email"
-                 placeholder="Введите Email или Номер телефона"
+                 placeholder="Введите Email"
                  value={email}
                  onChange={emailHandler}
                  onKeyPress={keyHandler}
                  required />
-                Введи email и нажми <button onClick={sentEmail}>Enter</button>
+                Введи email и нажми <button className='pass-fog-btn' onClick={sentEmail}>Enter</button>
             </div>
         </div>
     )
