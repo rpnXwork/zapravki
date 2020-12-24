@@ -117,19 +117,19 @@ export default function Users() {
                 </div>
                 <div>
                     <input value={input} type="number" onChange={(e)=>{setInput(e.target.value)}} className='page-input'/>
-                    <button disabled={disable} onClick={()=>{
+                    <button className='pagination-btn' disabled={disable} onClick={()=>{
                         if (input === undefined) {
                             setPage(1)
                             localStorage.setItem('page', 1)
                             setDate()
                         }
-                        if (input <= 0) {
+                        if (Number(input) <= 0) {
                             setMes("page can't be 0 or lower")
                         }
-                        
-                        if (input === page){
+                        if (input === currentPage){
+                            setMes(`You on ${input} page`)
                         }
-                        if (input && input !== currentPage){
+                        if (input && input !== currentPage && input > 0){
                             if (input > pages) {
                                 if (currentPage === pageArr.length) {
                                     setMes(`you already on last page`)
@@ -142,6 +142,7 @@ export default function Users() {
                                 setPage(input)
                                     localStorage.setItem('page', input)
                                     setDate()
+                                    console.log('wefjow')
                             }
                         }
                         
@@ -156,7 +157,7 @@ export default function Users() {
         <div className="afterregblock">
             <Loaderr/>
             <div
-            className='pass-fog-btn'
+            className='pagination-btn'
             style={{cursor:'pointer'}} 
             onClick={()=>{
                  setPage(1)

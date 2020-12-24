@@ -8,7 +8,6 @@ import {API, PORT} from '../api'
 import PhoneInput from 'react-phone-input-2'
 import './style/React-telinput.css'
 import './style/RegistrationPage.css'
-import DatePicker from 'react-date-picker'
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons'
@@ -25,6 +24,7 @@ export const RegistrationPage = () => {
     const [confirmation, setConfirmation] = useState(null)
     const [confirmstatus, setConfirmstatus] = useState(false)
     const [gender, setGender] = useState('Мужской')
+    const [date, setDate] = useState('2000-01-01')
     
     const [form, setForm] = useState({
         phoneNumber: null,
@@ -33,7 +33,7 @@ export const RegistrationPage = () => {
         firstName: "",
         lastName: "", 
         gender: "male",
-        birthdate: "2000-01-01"
+        birthdate: ""
       })
     const [rpas, setRpas] = useState({
         repeatPassword: ""
@@ -48,6 +48,10 @@ export const RegistrationPage = () => {
         setMes(null)
         clearError()
       }, [error, mes, message, clearError])
+
+      useEffect(() => {
+          setForm({...form, birthdate: Date.parse(date)})
+      }, [date])
 
       useEffect(() => {
           if (gender === 'Мужской'){
@@ -360,8 +364,8 @@ export const RegistrationPage = () => {
                             </div>
                             <div className="wrap-input wrap-data-input" data-validate="Email is required">
                             <div className='wrap-data-input-text'>Дата рождения</div>
-                            <input type='date' value={form.birthdate} name='birthdate'
-                                onChange={(e) => {changeHandler(e)}}/>
+                            <input type='date' value={date} name='birthdate'
+                                onChange={(e) => {setDate(e.target.value)}}/>
                             {/* <DatePicker 
                                 format={'dd-M-y'} 
                                 value={date} 

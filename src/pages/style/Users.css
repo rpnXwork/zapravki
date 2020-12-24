@@ -2,9 +2,31 @@
     margin-top: 110px;
 }
 
-.users-bode {
+.users-body {
     width: 99%;
-    margin: 1%;
+    margin: 0 1%;
+}
+
+.pagination-btn {
+    cursor: pointer;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 10px 13px;
+    display: inline-block;
+    color: #FFF;
+    position: relative;
+    display: inline-block;
+    line-height: 1;
+    -webkit-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+    vertical-align: middle;
+    text-align: center;
+    transition: all .4s ease;
+    text-transform: uppercase;
+    background-color: #41A350;
+    border-style: none;
 }
 
 .page-pagination {
@@ -36,4 +58,5 @@
 .page-input {
     width: 40px;
     margin-right: 5px;
+    height: 20px;
 }

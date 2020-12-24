@@ -15,7 +15,6 @@ export default function User() {
     const {request, error, clearError} = useHttp()
     const message = useMessage()
     const [mes, setMes] = useState(null)
-    const auth = useContext(AuthContext)
     const [money, setMoney] = useState()
     const { pathname } = useLocation();
 
@@ -24,6 +23,7 @@ export default function User() {
         if (pathname === `/user/${id}`){
             window.scrollTo(0, 0);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pathname])
 
     useEffect(() => {
