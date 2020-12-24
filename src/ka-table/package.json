@@ -1,0 +1,68 @@
+{
+  "_from": "ka-table",
+  "_id": "ka-table@6.1.0",
+  "_inBundle": false,
+  "_integrity": "sha512-y8MCn6smLtgGdpeGyd2uN7S5Q2osF0N5UnABaPKcR0EgAkIRcNVhjZbG2P1wgigVRa2ogLcEKR9V5enPHPKIYg==",
+  "_location": "/ka-table",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "ka-table",
+    "name": "ka-table",
+    "escapedName": "ka-table",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/ka-table/-/ka-table-6.1.0.tgz",
+  "_shasum": "f5ff86846112d22d17fac3ce0fde83ab8f0b7723",
+  "_spec": "ka-table",
+  "_where": "C:\\Users\\User\\Desktop\\zapravki",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/komarovalexander/ka-table/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/komarovalexander/ka-table/blob/master/LICENSE)\r [![npm version](https://img.shields.io/npm/v/ka-table.svg?style=flat-square)](https://www.npmjs.com/package/ka-table)\r [![Coverage Status](https://coveralls.io/repos/github/komarovalexander/ka-table/badge.svg?branch=master&service=github)](https://coveralls.io/github/komarovalexander/ka-table?branch=master&service=github)\r [![Build Status](https://travis-ci.com/komarovalexander/ka-table.svg?token=9QUEx9r7MWqF44f9VDer&branch=master)](https://travis-ci.com/komarovalexander/ka-table)\r [![minzipped size](https://badgen.net/bundlephobia/minzip/ka-table)](https://badgen.net/bundlephobia/minzip/ka-table)",
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "homepage": "https://komarovalexander.github.io/ka-table/#/overview",
+  "keywords": [
+    "datagrid",
+    "ts",
+    "js",
+    "javascript",
+    "typescript",
+    "datatable",
+    "ui-component",
+    "react",
+    "table",
+    "component",
+    "widget"
+  ],
+  "license": "MIT",
+  "name": "ka-table",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/komarovalexander/ka-table.git"
+  },
+  "version": "6.1.0"
+}

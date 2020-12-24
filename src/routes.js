@@ -8,8 +8,9 @@ import { RegistrationPage } from './pages/RegistrationPage';
 import { ActivatePage } from './pages/ActivatePage';
 import User from './pages/User';
 import { Changepassword } from './pages/Changepassword';
+import Users from './pages/Users';
 
-export const useRoutes = ({isAuthenticated,id}) => {
+export const useRoutes = ({isAuthenticated,id, role}) => {
 
   let loc = JSON.parse(localStorage.getItem("path"))
 
@@ -26,6 +27,11 @@ export const useRoutes = ({isAuthenticated,id}) => {
         <MapPage />
           <Connectors />
         </Route>
+        {role==='admin'?
+        <Route path="/users" exact>
+          <Users/>
+        </Route>:
+        <></>}
         <Route path="/user/:id" exact>
           <User/>
         </Route>

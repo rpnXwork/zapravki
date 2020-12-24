@@ -22,7 +22,6 @@ export const useAuth = (session) => {
   },[session])
 
   const login = useCallback((data,status = ss) => {
-    console.log(status)
     setId(data.id) 
     setPhoneNumber(data.phoneNumber)
     setEmail(data.email)

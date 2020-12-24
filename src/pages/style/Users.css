@@ -1,0 +1,39 @@
+.users-block {
+    margin-top: 110px;
+}
+
+.users-bode {
+    width: 99%;
+    margin: 1%;
+}
+
+.page-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-nums {
+    margin: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.page-num {
+    margin: 0 5px;
+    background: none;
+    border: unset;
+}
+
+.picked {
+    border-radius: 3px;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+    background: gray;
+}
+
+.page-input {
+    width: 40px;
+    margin-right: 5px;
+}

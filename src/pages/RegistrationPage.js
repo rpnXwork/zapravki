@@ -22,7 +22,6 @@ export const RegistrationPage = () => {
     const {loading, request, error, clearError} = useHttp()
     const [status, setStatus] = useState(false)
     const [passwordShow, setPasswordShow] = useState(false)
-    const [date, setDate] = useState(new Date(2000, 0, 1))
     const [confirmation, setConfirmation] = useState(null)
     const [confirmstatus, setConfirmstatus] = useState(false)
     const [gender, setGender] = useState('Мужской')
@@ -34,7 +33,7 @@ export const RegistrationPage = () => {
         firstName: "",
         lastName: "", 
         gender: "male",
-        birthdate: new Date(2000, 0, 1)
+        birthdate: "2000-01-01"
       })
     const [rpas, setRpas] = useState({
         repeatPassword: ""
@@ -169,64 +168,64 @@ export const RegistrationPage = () => {
           }
     }
 
-    const formatDate = (data) => {
-        setDate(data)
-        let arr = String(data).split(" ")
-        let year = arr[3]
-        let day = arr[2]
+    // const formatDate = (data) => {
+    //     // setDate(data)
+    //     let arr = String(data).split(" ")
+    //     let year = arr[3]
+    //     let day = arr[2]
 
-        const mton = (m) => {
+    //     const mton = (m) => {
 
-            if (m === "Jan") {
-                return('01')
+    //         if (m === "Jan") {
+    //             return('01')
 
-            } else if (m === "Feb") {
-                return('02')
-            }
-            else if (m === "Mar") {
-                return('03')
-            }
-            else if (m === "Apr") {
-                return('04')
-            }
-            else if (m === "May") {
-                return('05')
-            }
-            else if (m === "Jun") {
-                return('06')
-            }
-            else if (m === "Jul") {
-                return('07')
-            }
-            else if (m === "Aug") {
-                return('08')
-            }
-            else if (m === "Sep") {
-                return('09')
-            }
-            else if (m === "Oct") {
-                return('10')
-            }
-            else if (m === "Nov") {
-                return('11')
-            }
+    //         } else if (m === "Feb") {
+    //             return('02')
+    //         }
+    //         else if (m === "Mar") {
+    //             return('03')
+    //         }
+    //         else if (m === "Apr") {
+    //             return('04')
+    //         }
+    //         else if (m === "May") {
+    //             return('05')
+    //         }
+    //         else if (m === "Jun") {
+    //             return('06')
+    //         }
+    //         else if (m === "Jul") {
+    //             return('07')
+    //         }
+    //         else if (m === "Aug") {
+    //             return('08')
+    //         }
+    //         else if (m === "Sep") {
+    //             return('09')
+    //         }
+    //         else if (m === "Oct") {
+    //             return('10')
+    //         }
+    //         else if (m === "Nov") {
+    //             return('11')
+    //         }
 
-            else if (m === "Feb") {
-                return('11')
-            }
+    //         else if (m === "Feb") {
+    //             return('11')
+    //         }
 
-            else if (m === "Dec") {
-                return('12')
-            }
+    //         else if (m === "Dec") {
+    //             return('12')
+    //         }
 
-        }
+    //     }
 
-        let month = mton(arr[1])
+    //     let month = mton(arr[1])
         
-        let findatate = `${year}-${month}-${day}` 
+    //     let findatate = `${year}-${month}-${day}` 
 
-        setForm({...form,  "birthdate": findatate  })
-    }
+    //     setForm({...form,  "birthdate": findatate  })
+    // }
 
     const confirm = async () => {
         try {
@@ -361,12 +360,14 @@ export const RegistrationPage = () => {
                             </div>
                             <div className="wrap-input wrap-data-input" data-validate="Email is required">
                             <div className='wrap-data-input-text'>Дата рождения</div>
-                            <DatePicker 
+                            <input type='date' value={form.birthdate} name='birthdate'
+                                onChange={(e) => {changeHandler(e)}}/>
+                            {/* <DatePicker 
                                 format={'dd-M-y'} 
                                 value={date} 
                                 onChange={(data) =>formatDate(data)} 
                                 name="birthdate"
-                                locale={'by-BY'}/>
+                                locale={'by-BY'}/> */}
 
                             </div>
                             

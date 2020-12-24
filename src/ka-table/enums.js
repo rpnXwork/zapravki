@@ -1,0 +1,95 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var DataType;
+(function (DataType) {
+    DataType["Boolean"] = "boolean";
+    DataType["Date"] = "date";
+    DataType["Number"] = "number";
+    DataType["Object"] = "object";
+    DataType["String"] = "string";
+})(DataType = exports.DataType || (exports.DataType = {}));
+var EditingMode;
+(function (EditingMode) {
+    EditingMode["None"] = "none";
+    EditingMode["Cell"] = "cell";
+})(EditingMode = exports.EditingMode || (exports.EditingMode = {}));
+var ActionType;
+(function (ActionType) {
+    ActionType["CloseEditor"] = "CloseEditor";
+    ActionType["CloseRowEditors"] = "CloseRowEditors";
+    ActionType["DeleteRow"] = "DeleteRow";
+    ActionType["DeselectAllFilteredRows"] = "DeselectAllFilteredRows";
+    ActionType["DeselectAllRows"] = "DeselectAllRows";
+    ActionType["DeselectAllVisibleRows"] = "DeselectAllVisibleRows";
+    ActionType["DeselectRow"] = "DeselectRow";
+    ActionType["HideColumn"] = "HideColumn";
+    ActionType["HideDetailsRow"] = "HideDetailsRow";
+    ActionType["HideLoading"] = "HideLoading";
+    ActionType["HideNewRow"] = "HideNewRow";
+    ActionType["OpenEditor"] = "OpenEditor";
+    ActionType["OpenRowEditors"] = "OpenRowEditors";
+    ActionType["ReorderColumns"] = "ReorderColumns";
+    ActionType["ReorderRows"] = "ReorderRows";
+    ActionType["ResizeColumn"] = "ResizeColumn";
+    ActionType["SaveNewRow"] = "SaveNewRow";
+    ActionType["SaveRowEditors"] = "SaveRowEditors";
+    ActionType["ScrollTable"] = "ScrollTable";
+    ActionType["Search"] = "Search";
+    ActionType["SelectAllFilteredRows"] = "SelectAllFilteredRows";
+    ActionType["SelectAllRows"] = "SelectAllRows";
+    ActionType["SelectAllVisibleRows"] = "SelectAllVisibleRows";
+    ActionType["SelectRow"] = "SelectRow";
+    ActionType["SelectRowsRange"] = "SelectRowsRange";
+    ActionType["SelectSingleRow"] = "SelectSingleRow";
+    ActionType["ShowColumn"] = "ShowColumn";
+    ActionType["ShowDetailsRow"] = "ShowDetailsRow";
+    ActionType["ShowLoading"] = "ShowLoading";
+    ActionType["ShowNewRow"] = "ShowNewRow";
+    ActionType["UpdateCellValue"] = "UpdateCellValue";
+    ActionType["UpdateData"] = "UpdateData";
+    ActionType["UpdateEditorValue"] = "UpdateEditorValue";
+    ActionType["UpdateFilterRowOperator"] = "UpdateFilterRowOperator";
+    ActionType["UpdateFilterRowValue"] = "UpdateFilterRowValue";
+    ActionType["UpdateGroupsExpanded"] = "UpdateGroupsExpanded";
+    ActionType["UpdatePageIndex"] = "UpdatePageIndex";
+    ActionType["UpdatePagesCount"] = "UpdatePagesCount";
+    ActionType["UpdateRow"] = "UpdateRow";
+    ActionType["UpdateSortDirection"] = "UpdateSortDirection";
+    ActionType["UpdateVirtualScrolling"] = "UpdateVirtualScrolling";
+})(ActionType = exports.ActionType || (exports.ActionType = {}));
+var KeyboardEnum;
+(function (KeyboardEnum) {
+    KeyboardEnum[KeyboardEnum["Esc"] = 27] = "Esc";
+    KeyboardEnum[KeyboardEnum["Enter"] = 13] = "Enter";
+})(KeyboardEnum = exports.KeyboardEnum || (exports.KeyboardEnum = {}));
+var SortDirection;
+(function (SortDirection) {
+    SortDirection["Ascend"] = "ascend";
+    SortDirection["Descend"] = "descend";
+})(SortDirection = exports.SortDirection || (exports.SortDirection = {}));
+var SortingMode;
+(function (SortingMode) {
+    SortingMode["None"] = "none";
+    SortingMode["Single"] = "single";
+    SortingMode["SingleTripleState"] = "singleTripleState";
+    SortingMode["SingleRemote"] = "singleRemote";
+    SortingMode["SingleTripleStateRemote"] = "singleTripleStateRemote";
+    SortingMode["MultipleRemote"] = "multipleRemote";
+    SortingMode["MultipleTripleStateRemote"] = "multipleTripleStateRemote";
+})(SortingMode = exports.SortingMode || (exports.SortingMode = {}));
+var FilteringMode;
+(function (FilteringMode) {
+    FilteringMode["None"] = "none";
+    FilteringMode["FilterRow"] = "filterRow";
+})(FilteringMode = exports.FilteringMode || (exports.FilteringMode = {}));
+var FilterOperatorName;
+(function (FilterOperatorName) {
+    FilterOperatorName["Equal"] = "=";
+    FilterOperatorName["MoreThan"] = ">";
+    FilterOperatorName["LessThan"] = "<";
+    FilterOperatorName["MoreThanOrEqual"] = ">=";
+    FilterOperatorName["LessThanOrEqual"] = "<=";
+    FilterOperatorName["Contains"] = "contains";
+    FilterOperatorName["IsEmpty"] = "IsEmpty";
+    FilterOperatorName["IsNotEmpty"] = "IsNotEmpty";
+})(FilterOperatorName = exports.FilterOperatorName || (exports.FilterOperatorName = {}));

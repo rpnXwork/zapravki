@@ -81,10 +81,7 @@ function Nav() {
                      </NavLink>
                      }
                     {/* <div className='menu-item menu-item-p'>+ 375 19 859 65 89 </div> */}
-                    <div className='menu-item item-border'
-                        onMouseEnter ={()=>console.log("over")}
-                        onMouseLeave={()=>console.log('Leave')}
-                        ><FontAwesomeIcon icon={faFlagUsa} size="lg"/>
+                    <div className='menu-item item-border'><FontAwesomeIcon icon={faFlagUsa} size="lg"/>
                             
                         </div>
                     <div className='menu-item item-border'><FontAwesomeIcon icon={faCartArrowDown} size="lg"/></div>

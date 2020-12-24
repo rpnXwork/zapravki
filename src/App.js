@@ -16,7 +16,7 @@ function App() {
   const [session, setSession] = useState(false)
   const {id, token, emailConfirmed, phoneNumber, email, firstName, lastName, gender, birthdate, login, logout, ready, role} = useAuth(session)
   const isAuthenticated = !!token
-  const routes = useRoutes({isAuthenticated,id})
+  const routes = useRoutes({isAuthenticated,id,role})
 
   if (!ready) {
     return (

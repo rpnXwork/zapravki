@@ -24,8 +24,7 @@ export default function User() {
         if (pathname === `/user/${id}`){
             window.scrollTo(0, 0);
         }
-
-    }, [pathname]);
+    }, [pathname])
 
     useEffect(() => {
         message(mes)
@@ -57,7 +56,6 @@ export default function User() {
     useEffect(() => {
         getmoney()
     }, [])
-
 
     return (
         <div className='afterregblock'>

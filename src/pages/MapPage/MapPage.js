@@ -35,14 +35,20 @@ const MapPage = () => {
         
         ws.current.onopen = () => {
             console.log('socket open')
-            getChargingStatus()
             setConected(true)
+            getChargingStatus()
         }
 
         ws.current.onclose = () => {
-            console.log('socket close')
-            setConected(false)
-            setClose(true)
+            if (ws.current){
+                console.log('socket close')
+                setConected(false)
+                setClose(true)
+            } else {
+                console.log('close by unmount')
+                return
+
+            }    
         }
 
         ws.current.onmessage = e => {
@@ -108,8 +114,6 @@ const MapPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [use])
 
-
-
     useEffect(() => {
         if(close) { 
             ws.current = new WebSocket(SOCKET);
@@ -162,22 +166,22 @@ const MapPage = () => {
     },[options])
 
     useEffect(()=>{
-        if (chargeid !== undefined) {
+        if (chargeid !== undefined && conected) {
             ws.current.send(JSON.stringify({id: id}))
-            console.log('sent id')
         }
-    },[chargeid, id])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[chargeid])
 
     const getChargingStatus = () =>{
         if (isAuthenticated) {
             ws.current.send(JSON.stringify({id : id}))
-            console.log("user sent", {id : id})
         }
     }
 
     const updateOptions = (e) => {
         setOptions(e)
     }
+
     const updUse = (e) => {
         setUse(!!e)
     }

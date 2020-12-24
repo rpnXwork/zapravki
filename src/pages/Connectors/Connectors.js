@@ -468,7 +468,7 @@ const Connectors = () => {
                             {state.connectors[port-1]&&hour?
                             <div className='reserv-count'>{countCharge * Math.round(state.connectors[port-1].tariffs.charge*100)/100}</div>:
                             <div className='reserv-count'>{100 * Math.round(state.connectors[port-1].tariffs.charge*100)/100}</div>}
-                            <div className='reserv-UAH'>lmfkemfk</div>
+                            <div className='reserv-UAH'>Uah</div>
                             
                             <button
                             className='station-body-button reserv-btn'

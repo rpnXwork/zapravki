@@ -72,6 +72,9 @@
 .wrap-data-input-text {
     color: rgb(133, 133, 133);
     font-size: 16px;
+    height: 40px;
+    display: flex;
+    align-items: center;
 
 }
 
